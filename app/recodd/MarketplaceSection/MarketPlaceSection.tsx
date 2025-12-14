@@ -1,13 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import { Profile } from "@/lib/recodd/types";
-import { freelancers, businesses } from "@/lib/recodd/mockData";
+import {
+  getFreelancers,
+  getBusinesses,
+} from "@/lib/recodd/services/market.service";
 import { FiltersBar } from "@/app/recodd/MarketplaceSection/FiltersBar";
 import { ProfileCard } from "@/app/recodd/MarketplaceSection/ProfileCard";
 import { LayoutContainer } from "@/app/components/LayoutContainer";
+import { div } from "framer-motion/client";
 
 type Tab = "freelancers" | "business";
 
@@ -15,9 +20,31 @@ export const MarketplaceSection = () => {
   const [activeTab, setActiveTab] = useState<Tab>("freelancers");
   const [query, setQuery] = useState("");
   const [availability, setAvailability] = useState<string>("all");
+  const [data, setData] = useState<Profile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const source: Profile[] =
-    activeTab === "freelancers" ? freelancers : businesses;
+  const source = data;
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+
+    const load = async () => {
+      try {
+        const res =
+          activeTab === "freelancers"
+            ? await getFreelancers()
+            : await getBusinesses();
+        setData(res.data);
+      } catch (err) {
+        setError("something went wrong : Please try again");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [activeTab]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -139,13 +166,43 @@ export const MarketplaceSection = () => {
               layout
               className="grid grid-cols-1 md:grid-cols-2  gap-4 md:gap-5"
             >
-              {filtered.map(profile => (
-                <ProfileCard
-                  key={`${profile.type}-${profile.id}`}
-                  profile={profile}
-                  mode={activeTab}
-                />
-              ))}
+              {/* LOADING  : 🚨 ONE IMPORTANT RULE (REMEMBER THIS)
+                              Never render real data inside a loading block.
+                              Loading replaces content, it doesn’t wrap it.*/}
+              {loading && (
+                <motion.div className="py-12 text-center text-sm text-gray-500">
+                  Loading {activeTab}
+                  {filtered.map(profile => (
+                    <ProfileCard
+                      key={`${profile.type}-${profile.id}`}
+                      profile={profile}
+                      mode={activeTab}
+                    />
+                  ))}
+                </motion.div>
+              )}
+              {/* ERROR */}
+              {!loading && error && (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="col-span-full py-12 text-center text-sm text-red-500"
+                >
+                  {error}
+                </motion.div>
+              )}
+              {/* DATA */}
+              {!loading &&
+                !error &&
+                filtered.map(profile => (
+                  <ProfileCard
+                    key={`${profile.type}-${profile.id}`}
+                    profile={profile}
+                    mode={activeTab}
+                  />
+                ))}
             </motion.div>
           </AnimatePresence>
         )}
