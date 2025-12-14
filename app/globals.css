@@ -3,6 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --bg: 255 255 255;
+  --surface: 245 245 245;
+  --text: 23 23 23;
+  --muted: 115 115 115;
+}
+
+.dark {
+  --bg: 18 18 18;
+  --surface: 24 24 24;
+  --text: 237 237 237;
+  --muted: 163 163 163;
 }
 
 @theme inline {
