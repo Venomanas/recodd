@@ -21,7 +21,9 @@ export const FiltersBar = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between mb-6">
+    <div
+      className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-3 mb-6"
+    >
       {/* Search */}
       <div className="relative w-full md:max-w-xs">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -42,7 +44,7 @@ export const FiltersBar = ({
             className={`px-3 py-1.5 rounded-full border text-[11px] capitalize transition-all ${
               availability === opt
                 ? "bg-[#E53935] text-white border-[#E53935]"
-                : "border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800"
+                : "border-gray-300 dark:border-zinc-700 text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800"
             }`}
           >
             {opt === "all" ? "Any availability" : opt}

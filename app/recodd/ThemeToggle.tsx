@@ -21,9 +21,9 @@ export const ThemeToggle = () => {
       className="p-2 rounded-full bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-colors"
     >
       {isDark ? (
-        <Sun size={18} className="text-yellow-300" />
+        <Sun size={18} className="text-amber-400" />
       ) : (
-        <Moon size={18} className="text-slate-800" />
+        <Moon size={18} className="text-slate-300" />
       )}
     </Animatedbutton>
   );

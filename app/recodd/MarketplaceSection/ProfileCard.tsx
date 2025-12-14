@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Briefcase, Clock, DollarSign, MapPin, User } from "lucide-react";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import { Profile } from "@/lib/recodd/types";
+import { ui } from "@/lib/recodd/ui";
 
 type Props = {
   profile: Profile;
@@ -19,11 +20,11 @@ export const ProfileCard = ({ profile, mode }: Props) => {
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      className="bg-white dark:bg-zinc-900 border border-gray-200/80 dark:border-zinc-800 rounded-2xl p-4 md:p-5 flex gap-4 shadow-sm hover:shadow-md hover:-translate-y-2px transition-all"
+      className={`bg-[rgb(var(--surface))] border border-gray-700/70 dark:bg-zinc-900/60 dark:border-zinc-700/60 hover:shadow-md ${ui.radius.lg} p-4 py-1.5 ${ui.shadow.soft} transition-shadow font-normal`}
     >
       {/* Avatar */}
       <div className="shrink-0">
-        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-rose-500 to-orange-400 flex items-center justify-center text-white shadow-md">
+        <div className="w-14 h-14 rounded-2xl bg-[#E53935] flex items-center justify-center text-white shadow-md">
           <User className="w-6 h-6 opacity-90" />
         </div>
       </div>
@@ -82,7 +83,7 @@ export const ProfileCard = ({ profile, mode }: Props) => {
               <Animatedbutton className="px-3.5 py-1.5 text-xs rounded-full bg-[#E53935] text-white font-medium shadow-sm hover:shadow-md transition-all">
                 View profile
               </Animatedbutton>
-              <Animatedbutton className="px-3.5 py-1.5 text-xs rounded-full border border-gray-300 dark:border-zinc-700 text-gray-800 dark:text-gray-100 hover:bg-gray-100/70 dark:hover:bg-zinc-800/70 transition-all">
+              <Animatedbutton className="px-3.5 py-1.5 text-xs rounded-full border border-gray-300/70 dark:border-zinc-700/60 text-gray-800 dark:text-gray-100 hover:bg-gray-100/80 dark:hover:bg-zinc-800/60 transition-all">
                 Invite to project
               </Animatedbutton>
             </>
