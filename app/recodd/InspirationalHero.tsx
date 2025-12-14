@@ -24,12 +24,12 @@ export const InspirationalHero = () => {
 
   return (
     <section
-      className="
+      className={`
         w-full
         border-b border-gray-800/70
-        bg-[#121212]
-        bg-[radial-gradient(circle_at_top,rgba(229,57,53,0.26),rgba(18,18,18,1)_55%,#000000_100%)]`
-      "
+        bg-[#121212] text-[rgb(var(--text))]
+        bg-[radial-gradient(circle_at_top,rgba(229,57,53,0.26),rgba(18,18,18,1)_55%,#000000_100%)]
+      `}
     >
       <div
         className="
