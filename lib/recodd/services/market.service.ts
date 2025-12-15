@@ -8,17 +8,18 @@ type MarketplaceResponse = {
 };
 
 export async function getFreelancers(): Promise<MarketplaceResponse> {
-  const res = await fetch('/api/marketplace/freelancers');
+  const res = await fetch("/api/marketplace/freelancers", {
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Failed to fetch freelancers");
   return res.json();
 }
 
 export async function getBusinesses(): Promise<MarketplaceResponse> {
-  const res = await fetch('/api/marketplace/businesses');
+  const res = await fetch("/api/marketplace/businesses");
   if (!res.ok) throw new Error("Failed to fetch businesses");
   return res.json();
 }
-
 
 export async function getFreelancerById(id: string): Promise<Profile> {
   const res = await fetch(`/api/marketplace/freelancers/${id}`);

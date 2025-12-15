@@ -13,6 +13,7 @@ import { FiltersBar } from "@/app/recodd/MarketplaceSection/FiltersBar";
 import { ProfileCard } from "@/app/recodd/MarketplaceSection/ProfileCard";
 import { LayoutContainer } from "@/app/components/LayoutContainer";
 import { div } from "framer-motion/client";
+import { ContactModal } from "@/app/components/ContactModal";
 
 type Tab = "freelancers" | "business";
 
@@ -23,6 +24,7 @@ export const MarketplaceSection = () => {
   const [data, setData] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
 
   const source = data;
 
@@ -177,6 +179,7 @@ export const MarketplaceSection = () => {
                       key={`${profile.type}-${profile.id}`}
                       profile={profile}
                       mode={activeTab}
+                      onContact={() => setSelectedProfile(profile)}
                     />
                   ))}
                 </motion.div>
@@ -201,8 +204,17 @@ export const MarketplaceSection = () => {
                     key={`${profile.type}-${profile.id}`}
                     profile={profile}
                     mode={activeTab}
+                    onContact={() => setSelectedProfile(profile)}
                   />
                 ))}
+
+              {selectedProfile && (
+                <ContactModal
+                  profileId={selectedProfile.id}
+                  profileType={selectedProfile.type}
+                  onClose={() => setSelectedProfile(null)}
+                />
+              )}
             </motion.div>
           </AnimatePresence>
         )}
