@@ -9,7 +9,7 @@ import { LayoutContainer } from "./components/LayoutContainer";
 
 export default function RecoddApp() {
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-[#121212] transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-[#ffffff] dark:bg-[#121212] transition-colors duration-300">
       {/* NAVBAR - mobile first */}
       <nav className="sticky top-0 z-50 w-full border-b border-gray-200/70 dark:border-zinc-800/80 bg-white/90 dark:bg-[#121212]/90 backdrop-blur-md">
         <div className="flex h-14 md:h-16 items-center justify-between px-4 md:px-10 lg:px-20">

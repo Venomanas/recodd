@@ -9,7 +9,7 @@ export const ThemeToggle = () => {
 
   useEffect(() => {
     if (isDark) {
-      document.documentElement.classList.add("dark");
+      document.documentElement.classList.add("");
     } else {
       document.documentElement.classList.remove("dark");
     }

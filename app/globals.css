@@ -7,6 +7,7 @@
   --surface: 245 245 245;
   --text: 23 23 23;
   --muted: 115 115 115;
+  --accent: 220 38 38; /* healthy red */
 }
 
 .dark {
@@ -14,6 +15,7 @@
   --surface: 24 24 24;
   --text: 237 237 237;
   --muted: 163 163 163;
+  --accent: 239 68 68;
 }
 
 @theme inline {

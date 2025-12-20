@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { supabase } from "@/lib/supabaseClient"
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -15,6 +16,24 @@ export async function POST(req: Request) {
       );
     }
 
+    // Save to DB 
+    const { error } = await supabase
+      .from("contact_requests")
+      .insert([
+        {
+          sender_email:email,
+          message,
+          profile_id: profileId,
+          profile_type: profileType,
+        }
+      ]);
+
+      if(error) {
+        console.error("Supabase error : ", error);
+        throw new Error("DB insert failed");
+      }
+
+    // send email
     await resend.emails.send({
       from: "Recodd <anassayyed000@gmail.com>",
       to: process.env.CONTACT_RECEIVER_EMAIL!,
