@@ -21,19 +21,19 @@ export const Logo = ({ variant = "navbar" }: LogoProps) => {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center gap-3"
       >
-        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg shadow-red-500/30">
+        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-[#EF4444] flex items-center justify-center shadow-lg shadow-red-500/30">
           {/* <Aperture className="w-6 h-6 text-white" /> */}
-       
-        <Image
-          src={fullSrc}
-          alt="Recodd full logo"
-          width={100}
-          height={100}
-          priority
-          className="object-contain"
-        />
-      </div>
-      </motion.div> 
+
+          <Image
+            src={fullSrc}
+            alt="Recodd full logo"
+            width={100}
+            height={100}
+            priority
+            className="object-contain"
+          />
+        </div>
+      </motion.div>
     );
   }
 
