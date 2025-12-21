@@ -12,7 +12,6 @@ import {
 import { FiltersBar } from "@/app/recodd/MarketplaceSection/FiltersBar";
 import { ProfileCard } from "@/app/recodd/MarketplaceSection/ProfileCard";
 import { LayoutContainer } from "@/app/components/LayoutContainer";
-import { div } from "framer-motion/client";
 import { ContactModal } from "@/app/components/ContactModal";
 
 type Tab = "freelancers" | "business";
@@ -31,7 +30,6 @@ export const MarketplaceSection = () => {
   useEffect(() => {
     setLoading(true);
     setError(null);
-
     const load = async () => {
       try {
         const res =
@@ -40,7 +38,7 @@ export const MarketplaceSection = () => {
             : await getBusinesses();
         setData(res.data);
       } catch (err) {
-        setError("something went wrong : Please try again");
+        setError("Something went wrong. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -50,22 +48,19 @@ export const MarketplaceSection = () => {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-
     return source.filter(profile => {
       const matchesQuery =
         !q ||
         profile.name.toLowerCase().includes(q) ||
         profile.role.toLowerCase().includes(q) ||
         profile.tags?.some(tag => tag.toLowerCase().includes(q));
-
       const matchesAvailability =
         availability === "all" || profile.availability === availability;
-
       return matchesQuery && matchesAvailability;
     });
   }, [source, query, availability]);
 
-  const heading = activeTab === "freelancers" ? "Find talent" : "Find projects";
+  const heading = activeTab === "freelancers" ? "Find Talent" : "Find Projects";
   const subheading =
     activeTab === "freelancers"
       ? "Browse highly skilled professionals ready to start immediately."
@@ -73,79 +68,66 @@ export const MarketplaceSection = () => {
 
   return (
     <section
-      className=" w-full
-    py-10 md:py-12
-    bg-[radial-gradient(1200px_500px_at_20%_-10%,rgba(229,57,53,0.08),transparent_40%),
-        radial-gradient(900px_400px_at_90%_10%,rgba(0,0,0,0.06),transparent_45%)]"
+      className="
+      relative w-full py-16 md:py-20
+      bg-white dark:bg-black
+    "
     >
       <LayoutContainer>
-        {/* Desktop tabs */}
-        <div className="hidden md:flex items-center justify-between gap-6 mb-6">
+        {/* Header with tabs */}
+        <div className="flex items-start justify-between gap-6 mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
               {heading}
             </h2>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-base text-gray-600 dark:text-gray-400">
               {subheading}
             </p>
           </div>
 
-          <div className="flex bg-gray-100 dark:bg-zinc-800 p-1 rounded-full">
-            <Animatedbutton
-              onClick={() => setActiveTab("freelancers")}
-              className={`px-5 py-2 rounded-full text-xs font-medium transition-all ${
-                activeTab === "freelancers"
-                  ? "bg-[#E53935] text-white shadow-sm"
-                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-zinc-700"
-              }`}
-            >
-              Freelancers
-            </Animatedbutton>
-            <Animatedbutton
-              onClick={() => setActiveTab("business")}
-              className={`px-5 py-2 rounded-full text-xs font-medium transition-all ${
-                activeTab === "business"
-                  ? "bg-[#E53935] text-white shadow-sm"
-                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-200/70 dark:hover:bg-zinc-700"
-              }`}
-            >
-              Businesses
-            </Animatedbutton>
+          {/* Desktop tabs */}
+          <div className="hidden md:flex gap-2">
+            {(["freelancers", "business"] as Tab[]).map(tab => (
+              <motion.button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                whileTap={{ scale: 0.95 }}
+                className={`
+                  px-6 py-2.5 rounded-full text-sm font-semibold
+                  transition-all duration-300
+                  ${
+                    activeTab === tab
+                      ? "bg-[#EF4444] text-white shadow-lg"
+                      : "bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
+                  }
+                `}
+              >
+                {tab === "freelancers" ? "Freelancers" : "Businesses"}
+              </motion.button>
+            ))}
           </div>
         </div>
 
         {/* Mobile tabs */}
-        <div className="md:hidden mb-5 bg-gray-100 dark:bg-zinc-800 p-1 rounded-xl flex">
-          <Animatedbutton
-            onClick={() => setActiveTab("freelancers")}
-            className={`flex-1 py-2.5 rounded-lg text-xs font-medium transition-all ${
-              activeTab === "freelancers"
-                ? "bg-[#E53935] text-white shadow-sm"
-                : "text-gray-700 dark:text-gray-200"
-            }`}
-          >
-            Freelancers
-          </Animatedbutton>
-          <Animatedbutton
-            onClick={() => setActiveTab("business")}
-            className={`flex-1 py-2.5 rounded-lg text-xs font-medium transition-all ${
-              activeTab === "business"
-                ? "bg-[#E53935] text-white shadow-sm"
-                : "text-gray-700 dark:text-gray-200"
-            }`}
-          >
-            Businesses
-          </Animatedbutton>
-        </div>
-
-        {/* Heading (small screens) */}
-        <div className="md:hidden mb-3">
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
-            {heading}
-          </h2>
-          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-            {subheading}
-          </p>
+        <div className="md:hidden mb-6 flex gap-2">
+          {(["freelancers", "business"] as Tab[]).map(tab => (
+            <motion.button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              whileTap={{ scale: 0.95 }}
+              className={`
+                flex-1 py-3 rounded-full text-sm font-semibold
+                transition-all duration-300
+                ${
+                  activeTab === tab
+                    ? "bg-[#EF4444] text-white shadow-lg"
+                    : "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300"
+                }
+              `}
+            >
+              {tab === "freelancers" ? "Freelancers" : "Businesses"}
+            </motion.button>
+          ))}
         </div>
 
         {/* Filters */}
@@ -157,66 +139,48 @@ export const MarketplaceSection = () => {
         />
 
         {/* List */}
-        {filtered.length === 0 ? (
-          <div className="mt-8 rounded-2xl border border-dashed border-gray-300 dark:border-zinc-700 p-8 text-center text-sm text-gray-500 dark:text-gray-400">
-            No matches yet. Try adjusting your filters or searching for a
-            different skill.
+        {loading ? (
+          <div className="py-20 text-center">
+            <div className="inline-block w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin" />
+            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+              Loading {activeTab}...
+            </p>
           </div>
+        ) : error ? (
+          <div className="py-20 text-center">
+            <p className="text-red-500">{error}</p>
+          </div>
+        ) : filtered.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-8 rounded-3xl border-2 border-dashed border-gray-300 dark:border-zinc-700 p-12 text-center"
+          >
+            <p className="text-base text-gray-500 dark:text-gray-400">
+              No matches found. Try adjusting your filters or search terms.
+            </p>
+          </motion.div>
         ) : (
-          <AnimatePresence mode="popLayout">
-            <motion.div
-              layout
-              className="grid grid-cols-1 md:grid-cols-2  gap-4 md:gap-5"
-            >
-              {/* LOADING  : 🚨 ONE IMPORTANT RULE (REMEMBER THIS)
-                              Never render real data inside a loading block.
-                              Loading replaces content, it doesn’t wrap it.*/}
-              {loading && (
-                <motion.div className="py-12 text-center text-sm text-gray-500">
-                  Loading {activeTab}
-                  {filtered.map(profile => (
-                    <ProfileCard
-                      key={`${profile.type}-${profile.id}`}
-                      profile={profile}
-                      mode={activeTab}
-                      onContact={() => setSelectedProfile(profile)}
-                    />
-                  ))}
-                </motion.div>
-              )}
-              {/* ERROR */}
-              {!loading && error && (
-                <motion.div
-                  key="error"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="col-span-full py-12 text-center text-sm text-red-500"
-                >
-                  {error}
-                </motion.div>
-              )}
-              {/* DATA */}
-              {!loading &&
-                !error &&
-                filtered.map(profile => (
-                  <ProfileCard
-                    key={`${profile.type}-${profile.id}`}
-                    profile={profile}
-                    mode={activeTab}
-                    onContact={() => setSelectedProfile(profile)}
-                  />
-                ))}
-
-              {selectedProfile && (
-                <ContactModal
-                  profileId={selectedProfile.id}
-                  profileType={selectedProfile.type}
-                  onClose={() => setSelectedProfile(null)}
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <AnimatePresence mode="popLayout">
+              {filtered.map(profile => (
+                <ProfileCard
+                  key={`${profile.type}-${profile.id}`}
+                  profile={profile}
+                  mode={activeTab}
+                  onContact={() => setSelectedProfile(profile)}
                 />
-              )}
-            </motion.div>
-          </AnimatePresence>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        )}
+
+        {selectedProfile && (
+          <ContactModal
+            profileId={selectedProfile.id}
+            profileType={selectedProfile.type}
+            onClose={() => setSelectedProfile(null)}
+          />
         )}
       </LayoutContainer>
     </section>

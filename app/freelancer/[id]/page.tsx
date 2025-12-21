@@ -36,16 +36,16 @@ export default function FreelancerProfilePage() {
     <section className="py-10">
       <div className="max-w-4xl mx-auto px-4 space-y-6">
         <h1 className="text-3xl font-semibold">{profile.name}</h1>
-        <p className="text-gray-300">{profile.role}</p>
+        <p className="text-[rgb(var(--muted))]">{profile.role}</p>
 
-        <div className="flex flex-wrap gap-4 text-sm text-gray-300 items-center">
+        <div className="flex flex-wrap gap-4 text-sm text-[rgb(var(--muted))] items-center">
           <span>{profile.experience}</span>
           <span>{profile.budget}</span>
           <span>{profile.location}</span>
 
           <Animatedbutton
             onClick={() => setOpen(true)}
-            className="bg-[#E53935] text-white tracking-tight"
+            className="bg-white text-[#E53935]/80 font-serif tracking-tight"
           >
             Contact freelancer
           </Animatedbutton>
@@ -55,7 +55,7 @@ export default function FreelancerProfilePage() {
           {profile.tags?.map(tag => (
             <span
               key={tag}
-              className="px-2 py-1 text-xs rounded-full bg-gray-600/70  text-gray-200"
+              className="px-2 py-1 text-xs rounded-full bg-gray-600/60  text-gray-200"
             >
               {tag}
             </span>

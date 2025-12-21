@@ -1,21 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
   --bg: 255 255 255;
-  --surface: 245 245 245;
-  --text: 23 23 23;
+  --surface: 250 250 250;
+  --text: 15 15 15;
   --muted: 115 115 115;
-  --accent: 220 38 38; /* healthy red */
+  --border: 228 228 231;
+  --accent: 239 68 68;
+  --accent-hover: 220 38 38;
+  --shadow: 0 0 0;
 }
 
 .dark {
-  --bg: 18 18 18;
-  --surface: 24 24 24;
-  --text: 237 237 237;
-  --muted: 163 163 163;
+  --bg: 9 9 11;
+  --surface: 24 24 27;
+  --text: 250 250 250;
+  --muted: 161 161 170;
+  --border: 39 39 42;
   --accent: 239 68 68;
+  --accent-hover: 248 113 113;
+  --shadow: 0 0 0;
 }
 
 @theme inline {
@@ -33,7 +37,33 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: rgb(var(--bg));
+  color: rgb(var(--text));
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--surface));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--accent));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--accent-hover));
+}
+
+/* Smooth focus rings */
+*:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 2px;
+  border-radius: 4px;
 }

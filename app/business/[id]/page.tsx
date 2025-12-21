@@ -38,14 +38,14 @@ export default function BusinessProfilePage() {
         <h1 className="text-3xl font-semibold">{profile.name}</h1>
         <p className="text-gray-500">{profile.role}</p>
 
-        <div className="flex gap-4 text-sm items-center">
+        <div className="flex gap-4 text-sm items-center text-green-200">
           <span>{profile.experience}</span>
           <span>{profile.budget}</span>
           <span>{profile.location}</span>
 
           <Animatedbutton
             onClick={() => setOpen(true)}
-            className="bg-[#E53935] text-white"
+            className="text-[#E53935] bg-white tracking-tighter "
           >
             Send proposal
           </Animatedbutton>
