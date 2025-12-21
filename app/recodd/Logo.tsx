@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Aperture } from "lucide-react";
 
 type LogoVariant = "navbar" | "footer" | "mark";
 
@@ -10,65 +11,71 @@ type LogoProps = {
 };
 
 export const Logo = ({ variant = "navbar" }: LogoProps) => {
-  // adjust these paths to match your /public files
-  const fullSrc = "/logo-icon.webp"; // circular shutter only
-  const markSrc = "/logo.webp"; // full RECODD brand
+  const fullSrc = "/logo.webp"; // Your full brand logo
+  const markSrc = "/logo-icon.webp"; // Your icon logo
 
   if (variant === "footer") {
-    // FOOTER: full brand logo
     return (
       <motion.div
         initial={{ opacity: 0, y: 4 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center"
+        className="flex items-center gap-3"
       >
+        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg shadow-red-500/30">
+          {/* <Aperture className="w-6 h-6 text-white" /> */}
+       
         <Image
           src={fullSrc}
           alt="Recodd full logo"
-          width={90}
-          height={30}
+          width={100}
+          height={100}
           priority
           className="object-contain"
         />
-      </motion.div>
+      </div>
+      </motion.div> 
     );
   }
 
   if (variant === "mark") {
-    // MARK ONLY: just the red shutter for future use
     return (
       <motion.div
-        initial={{ opacity: 0, y: 4 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ rotate: 12 }}
+        transition={{ duration: 0.3 }}
         className="flex items-center"
       >
-        <Image
-          src={markSrc}
-          alt="Recodd icon"
-          width={40}
-          height={40}
-          priority
-          className="object-contain"
-        />
+        <div className="w-12 h-12 rounded-xl bg-linear-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg shadow-red-500/30">
+          <Aperture className="w-7 h-7 text-white" />
+        </div>
       </motion.div>
     );
   }
 
-  // NAVBAR: icon + text (bigger)
+  // NAVBAR: icon + text
   return (
     <motion.div
-      initial={{ opacity: 0, y: 4 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
       className="flex items-center gap-3 select-none"
     >
-      <Image
+      <motion.div
+        whileHover={{ rotate: 12, scale: 1.1 }}
+        transition={{ duration: 0.3 }}
+        className="w-10 h-10 rounded-xl bg-linear-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg shadow-red-500/30"
+      >
+        <Aperture className="w-6 h-6 text-white" /> 
+        <Image
         src={markSrc}
-        alt="Recodd icon"
-        width={140}
+        alt="Recodd"
+        width={100}
         height={100}
         priority
         className="object-contain"
       />
+      </motion.div>
+      
     </motion.div>
   );
 };

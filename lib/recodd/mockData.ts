@@ -17,7 +17,7 @@ export const freelancers: Profile[] = [
     name: "Sarah Jenkins",
     role: "UI/UX Designer",
     experience: "5 Years",
-    budget: "$45/hr",
+    budget: "$14/hr",
     type: "freelancer",
     tags: ["Figma", "Product Design"],
     location: "Remote · UK",
