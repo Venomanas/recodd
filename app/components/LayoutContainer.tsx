@@ -1,9 +1,3 @@
-export const LayoutContainer = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => (
-  <div className="w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-20">
-    {children}
-  </div>
+export const LayoutContainer = ({ children }: { children: React.ReactNode }) => (
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">{children}</div>
 );
