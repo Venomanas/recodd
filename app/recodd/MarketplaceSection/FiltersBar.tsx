@@ -30,60 +30,54 @@ export const FiltersBar = ({
   ];
 
   return (
-    <div
-      className="
-      flex flex-col lg:flex-row gap-4
-      rounded-2xl
-      bg-white dark:bg-zinc-900
-      border border-gray-200 dark:border-zinc-800
-      p-4
-      mb-8
-      shadow-lg
-    "
-    >
-      {/* Search */}
-      <div className="relative flex-1">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          value={query}
-          onChange={handleSearch}
-          placeholder="Search by role, skill, or name..."
-          className="
-            w-full pl-12 pr-4 py-3
-            text-sm
-            rounded-xl
-            border border-gray-300 dark:border-zinc-700
-            bg-gray-50 dark:bg-zinc-800
-            text-gray-900 dark:text-white
-            placeholder:text-gray-400
-            focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent
-            transition-all
-          "
-        />
-      </div>
+    <div className="mb-10 space-y-4">
+      <div className="flex flex-col lg:flex-row gap-4">
+        {/* Search Input - "Matte" Surface Style */}
+        <div className="relative flex-1 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[rgb(var(--muted))] group-focus-within:text-[rgb(var(--accent))] transition-colors" />
+          <input
+            value={query}
+            onChange={handleSearch}
+            placeholder="Search by role, skill, or name..."
+            className="
+              w-full pl-11 pr-4 py-3.5
+              text-sm
+              rounded-2xl
+              bg-[rgb(var(--surface))]
+              border border-transparent
+              text-[rgb(var(--text))]
+              placeholder:text-[rgb(var(--muted))]
+              focus:outline-none 
+              focus:bg-[rgb(var(--bg))]
+              focus:border-[rgb(var(--accent))]
+              focus:ring-1 focus:ring-[rgb(var(--accent))]
+              transition-all duration-200
+              shadow-sm
+            "
+          />
+        </div>
 
-      {/* Availability filters */}
-      <div className="flex flex-wrap gap-2">
-        {filterOptions.map(opt => (
-          <motion.button
-            key={opt.value}
-            onClick={() => onAvailabilityChange(opt.value)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className={`
-              px-4 py-2 rounded-xl
-              text-xs font-medium
-              border transition-all duration-200
-              ${
-                availability === opt.value
-                  ? "bg-linear-to-r from-red-500 to-red-600 text-white border-red-500 shadow-lg shadow-red-500/30"
-                  : "border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
-              }
-            `}
-          >
-            {opt.label}
-          </motion.button>
-        ))}
+        {/* Filter Chips */}
+        <div className="flex flex-wrap gap-2 items-center">
+          {filterOptions.map(opt => (
+            <motion.button
+              key={opt.value}
+              onClick={() => onAvailabilityChange(opt.value)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`
+                px-4 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 border
+                ${
+                  availability === opt.value
+                    ? "bg-[rgb(var(--text))] border-[rgb(var(--text))] text-[rgb(var(--bg))] shadow-md"
+                    : "bg-[rgb(var(--surface))] border-transparent text-[rgb(var(--muted))] hover:text-[rgb(var(--text))] hover:bg-[rgb(var(--bg))] hover:border-[rgb(var(--border))]"
+                }
+              `}
+            >
+              {opt.label}
+            </motion.button>
+          ))}
+        </div>
       </div>
     </div>
   );
