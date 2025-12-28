@@ -2,73 +2,71 @@
 
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const ThemeToggle = () => {
   const [isDark, setIsDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.remove("dark");
-    } else {
+    const timer = setTimeout(() => {
+      const hasDarkClass = document.documentElement.classList.contains("dark");
+      setIsDark(hasDarkClass);
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    if (newTheme) {
       document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
     }
-  }, [isDark]);
+  };
+
+  if (!mounted) return (
+  <div className="w-9 h-9 bg-zinc-100 dark:bg-zinc-800 animate-pulse rounded-full" />
+  ) // Prevent hydration mismatch
 
   return (
-    <motion.button
-      onClick={() => setIsDark(prev => !prev)}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
+    <button
+      onClick={toggleTheme}
       className="
-        relative
-        w-12 h-12
-        rounded-full
-        bg-linear-to-br from-gray-100 to-gray-200
-        dark:from-slate-500 dark:to-slate-900
-        shadow-lg shadow-gray-300/50 dark:shadow-black/50
-        hover:shadow-xl
-        transition-all duration-300
-        overflow-hidden
-        group
+        relative w-9 h-9 rounded-full
+        flex items-center justify-center
+        text-zinc-500 dark:text-zinc-400
+        hover:bg-zinc-100 dark:hover:bg-zinc-800
+        hover:text-[rgb(var(--accent))] dark:hover:text-[rgb(var(--accent))]
+        transition-colors duration-200
       "
+      aria-label="Toggle theme"
     >
-      {/* Icon */}
-      <div className="absolute inset-0 flex items-center justify-center z-10">
+      <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
-          <Sun className="w-5 h-5 text-yellow-300 transition-transform duration-300 group-hover:rotate-90" />
+          <motion.div
+            key="moon"
+            initial={{ scale: 0.5, opacity: 0, rotate: -90 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            exit={{ scale: 0.5, opacity: 0, rotate: 90 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Moon size={18} />
+          </motion.div>
         ) : (
-          <Moon className="w-5 h-5 text-blue-400 transition-transform duration-300 group-hover:-rotate-12" />
+          <motion.div
+            key="sun"
+            initial={{ scale: 0.5, opacity: 0, rotate: 90 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            exit={{ scale: 0.5, opacity: 0, rotate: -90 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Sun size={18} />
+          </motion.div>
         )}
-      </div>
-
-      {/* Aperture blades animation */}
-      <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity">
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute inset-0 bg-linear-to-r from-transparent via-white to-transparent dark:via-zinc-600"
-            style={{
-              transform: `rotate(${i * 60}deg)`,
-              transformOrigin: "center",
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Pulse ring */}
-      <motion.div
-        className="absolute inset-0 rounded-full border-2 border-red-100"
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.5, 0, 0.5],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-    </motion.button>
+      </AnimatePresence>
+    </button>
   );
 };

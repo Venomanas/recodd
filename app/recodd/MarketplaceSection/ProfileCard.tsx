@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Briefcase, Clock, MapPin, User } from "lucide-react";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import { Profile } from "@/lib/recodd/types";
-import { ui } from "@/lib/recodd/ui";
 import Link from "next/link";
 
 type Props = {
@@ -15,13 +14,6 @@ type Props = {
 
 export const ProfileCard = ({ profile, mode, onContact }: Props) => {
   const isFreelancer = mode === "freelancers";
-  const badgeStyles: Record<string, string> = {
-    "full-time":
-    "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
-    "part-time": "bg-amber-500/10 text-amber-400 border border-amber-500/20",
-    contract: "bg-sky-500/10 text-sky-400 border border-sky-500/20",
-    project: "bg-violet-500/10 text-violet-400 border border-violet-500/20",
-  };
 
   return (
     <motion.article
@@ -29,108 +21,116 @@ export const ProfileCard = ({ profile, mode, onContact }: Props) => {
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      className={` rounded-2xl
-         dark:bg-[rgb(var(--surface))] 
-         dark:border dark:border-[rgb(var(--border))]
-         p-5
-         transition-all
-        hover:border-zinc-700/80
-        hover:shadow-lg ${ui.radius.lg} p-4 py-1.5 ${ui.shadow.soft}  transition-shadow font-normal`}
+      className="
+        group relative 
+        rounded-3xl 
+        bg-[rgb(var(--surface))] 
+        p-1
+        transition-all duration-300
+        hover:shadow-xl hover:shadow-black/5
+      "
     >
-      {/* Avatar */}
-      <div className="shrink-0">
-        <div className="w-14 h-14 rounded-2xl bg-[#E53935] flex items-center justify-center text-white shadow-md">
-          <User className="w-6 h-6 opacity-90" />
-        </div>
-      </div>
-
-      {/* Info */}
-      <div className="flex-1 min-w-0 space-y-1">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="text-sm dark:text-[rgb(var(--text))] md:text-base font-semibold text-black truncate tracking-tight">
-              {profile.name}
-            </h3>
-            <p className="text-sm md:text-sm text-slate-400 flex items-center gap-1 mt-0.5">
-              <Briefcase size={14} />
-              <span className="truncate">{profile.role}</span>
-            </p>
+      <div className="h-full rounded-[20px] bg-[rgb(var(--bg))] p-5 border border-[rgb(var(--border))] group-hover:border-[rgb(var(--accent))/30] transition-colors duration-300">
+        <div className="flex gap-4">
+          {/* Avatar - Squircle Shape for Modern Tech feel */}
+          <div className="shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center text-[rgb(var(--muted))] shadow-inner border border-[rgb(var(--border))]">
+              <User className="w-6 h-6" />
+            </div>
           </div>
 
-          <span className="hidden md:inline-flex text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-600 border border-emerald-100 dark:border-emerald-800">
-            {profile.availability ?? "Flexible"}
-          </span>
+          {/* Header Info */}
+          <div className="flex-1 min-w-0">
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-base font-semibold text-[rgb(var(--text))] truncate tracking-tight">
+                  {profile.name}
+                </h3>
+                <p className="text-sm text-[rgb(var(--muted))] flex items-center gap-1.5 mt-1">
+                  <Briefcase size={14} />
+                  <span className="truncate">{profile.role}</span>
+                </p>
+              </div>
 
-          <span
-            className={`px-2 py-1 text-xs rounded-full ${
-              badgeStyles[profile.availability ?? "project"]
-            }`}
-          >
-            {profile.availability}
+              {/* Availability Badge - Now Clean & Monotone */}
+              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-[rgb(var(--surface))] text-[10px] font-medium text-[rgb(var(--text))] border border-[rgb(var(--border))] uppercase tracking-wide">
+                {profile.availability || "Flexible"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Metadata Grid */}
+        <div className="mt-5 flex flex-wrap gap-y-2 gap-x-4 text-xs text-[rgb(var(--muted))] py-4 border-t border-b border-[rgb(var(--border))] border-dashed">
+          <span className="flex items-center gap-1.5">
+            <Clock size={14} />
+            {profile.experience}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <MapPin size={14} />
+            {profile.location || "Remote"}
+          </span>
+          <span className="font-semibold text-[rgb(var(--text))] ml-auto">
+            {profile.budget}
           </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] md:text-xs mt-1">
-          <span className="inline-flex items-center gap-1 text-slate-900 dark:text-slate-500">
-            <Clock size={13} />
-            {profile.experience}
-          </span>
-          <span className="inline-flex items-center gap-1 font-semibold  text-white dark:text-[rgb(var(--text))] ">
-            {profile.budget}
-          </span>
-          {profile.location && (
-            <span className="inline-flex items-center gap-1 text-gray-500 dark:text-gray-400">
-              <MapPin size={13} />
-              {profile.location}
+        {/* Tags */}
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {profile.tags?.slice(0, 3).map(tag => (
+            <span
+              key={tag}
+              className="px-2.5 py-1 rounded-md bg-[rgb(var(--surface))] text-[11px] font-medium text-[rgb(var(--muted))]"
+            >
+              {tag}
+            </span>
+          ))}
+          {profile.tags && profile.tags.length > 3 && (
+            <span className="px-2.5 py-1 text-[11px] text-[rgb(var(--muted))]">
+              +{profile.tags.length - 3}
             </span>
           )}
         </div>
 
-        {profile.tags && profile.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 pt-1">
-            {profile.tags.slice(0, 4).map(tag => (
-              <span
-                key={tag}
-                className="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-zinc-800 text-[10px] text-gray-700 dark:text-gray-200"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <div className="pt-2 flex flex-wrap gap-2">
+        {/* Actions */}
+        <div className="mt-6 flex gap-3">
           {isFreelancer ? (
             <>
-              <Link href={`/freelancer/${profile.id}`}>
+              <Link href={`/freelancer/${profile.id}`} className="flex-1">
                 <Animatedbutton
                   variant="secondary"
+                  className="w-full justify-center"
                 >
-                  View profile
+                  View
                 </Animatedbutton>
               </Link>
-              <Animatedbutton
-                onClick={onContact}
-                variant="primary"
-              >
-                Invite to project
-              </Animatedbutton>
+              <div className="flex-1" onClick={onContact}>
+                <Animatedbutton
+                  variant="primary"
+                  className="w-full justify-center"
+                >
+                  Invite
+                </Animatedbutton>
+              </div>
             </>
           ) : (
             <>
-              <Link href={`/business/${profile.id}`}>
-                <Animatedbutton 
-                variant="secondary"
+              <Link href={`/business/${profile.id}`} className="flex-1">
+                <Animatedbutton
+                  variant="secondary"
+                  className="w-full justify-center"
                 >
-                  View brief
+                  Brief
                 </Animatedbutton>
               </Link>
-              <Animatedbutton
-                onClick={onContact}
-                variant="primary"
-              >
-                Send proposal
-              </Animatedbutton>
+              <div className="flex-1" onClick={onContact}>
+                <Animatedbutton
+                  variant="primary"
+                  className="w-full justify-center"
+                >
+                  Apply
+                </Animatedbutton>
+              </div>
             </>
           )}
         </div>

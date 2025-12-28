@@ -2,13 +2,13 @@
 
 :root {
   --bg: 255 255 255;
-  --surface: 250 250 250;
-  --text: 15 15 15;
-  --muted: 115 115 115;
+  --surface: 244 244 245;
+  --text: 24 24 27;
+  --muted: 113 113 122;
   --border: 228 228 231;
-  --accent: 239 68 68;
-  --accent-hover: 220 38 38;
-  --shadow: 0 0 0;
+
+  --accent: 225 29 72;
+  --accent-hover: 190 18 60;
 }
 
 .dark {
@@ -17,9 +17,9 @@
   --text: 250 250 250;
   --muted: 161 161 170;
   --border: 39 39 42;
+
   --accent: 239 68 68;
   --accent-hover: 248 113 113;
-  --shadow: 0 0 0;
 }
 
 @theme inline {
@@ -41,6 +41,8 @@ body {
   color: rgb(var(--text));
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+  letter-spacing: -0.015em;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Custom scrollbar */
@@ -66,4 +68,34 @@ body {
   outline: 2px solid rgb(var(--accent));
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  /* Match the page background so it feels transparent */
+  background: transparent; 
+}
+
+::-webkit-scrollbar-thumb {
+  /* Subtle gray that works in both light/dark modes */
+  background-color: rgba(113, 113, 122, 0.3); /* Zinc-500 low opacity */
+  border-radius: 9999px;
+  /* Adds a border around the thumb to create "padding" effect */
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  /* Slightly darker on hover */
+  background-color: rgba(113, 113, 122, 0.6);
+}
+
+/* Firefox support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(113, 113, 122, 0.3) transparent;
 }

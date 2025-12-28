@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import { Profile } from "@/lib/recodd/types";
@@ -13,18 +13,39 @@ import { FiltersBar } from "@/app/recodd/MarketplaceSection/FiltersBar";
 import { ProfileCard } from "@/app/recodd/MarketplaceSection/ProfileCard";
 import { LayoutContainer } from "@/app/components/LayoutContainer";
 import { ContactModal } from "@/app/components/ContactModal";
+import { useSearchParams } from "next/navigation";
+import SkeletonCard from "./SkeletonCard";
 
 type Tab = "freelancers" | "business";
 
-export const MarketplaceSection = () => {
-  const [activeTab, setActiveTab] = useState<Tab>("freelancers");
+// We wrap the content in a separate component to safely use useSearchParams
+
+const MarketplaceContent = () => {
   const [query, setQuery] = useState("");
   const [availability, setAvailability] = useState<string>("all");
   const [data, setData] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+  const SearchParams = useSearchParams();
+  const typeParam = SearchParams.get("type");
+  const initialTab: "freelancers" | "business" =
+    typeParam === "business" ? "business" : "freelancers";
 
+  const [activeTab, setActiveTab] = useState<"freelancers" | "business">(
+    initialTab
+  );
+
+  useEffect(() => {
+    const type = SearchParams.get("type");
+    if (type === "business") setActiveTab("business");
+    else if (
+      type === "freelancer" ||
+      type === "freelance" ||
+      type === "freelancers"
+    )
+      setActiveTab("freelancers");
+  }, [SearchParams]);
   const source = data;
 
   useEffect(() => {
@@ -68,37 +89,37 @@ export const MarketplaceSection = () => {
 
   return (
     <section
+      id="marketplace"
       className="
       relative w-full py-16 md:py-20
-      bg-white dark:bg-black
+      bg-[rgb(var(--bg))] scroll-mt-20
     "
     >
       <LayoutContainer>
         {/* Header with tabs */}
-        <div className="flex items-start justify-between gap-6 mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-3xl md:text-4xl font-bold text-[rgb(var(--text))] mb-3 tracking-tight">
               {heading}
             </h2>
-            <p className="text-base text-gray-600 dark:text-gray-400">
+            <p className="text-base text-[rgb(var(--muted))] max-w-lg leading-relaxed">
               {subheading}
             </p>
           </div>
 
           {/* Desktop tabs */}
-          <div className="hidden md:flex gap-2">
+          <div className="hidden md:flex bg-[rgb(var(--surface))] p-1.5 rounded-full border border-[rgb(var(--border))]">
             {(["freelancers", "business"] as Tab[]).map(tab => (
               <motion.button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 whileTap={{ scale: 0.95 }}
                 className={`
-                  px-6 py-2.5 rounded-full text-sm font-semibold
-                  transition-all duration-300
+                  relative px-6 py-2 rounded-full text-sm font-medium transition-all duration-300
                   ${
                     activeTab === tab
-                      ? "bg-[#EF4444] text-white shadow-lg"
-                      : "bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
+                      ? "text-[rgb(var(--text))] shadow-sm bg-[rgb(var(--bg))]"
+                      : "text-[rgb(var(--muted))] hover:text-[rgb(var(--text))]"
                   }
                 `}
               >
@@ -109,19 +130,18 @@ export const MarketplaceSection = () => {
         </div>
 
         {/* Mobile tabs */}
-        <div className="md:hidden mb-6 flex gap-2">
+        <div className="md:hidden mb-8 flex bg-[rgb(var(--surface))] p-1 rounded-xl">
           {(["freelancers", "business"] as Tab[]).map(tab => (
             <motion.button
               key={tab}
               onClick={() => setActiveTab(tab)}
               whileTap={{ scale: 0.95 }}
               className={`
-                flex-1 py-3 rounded-full text-sm font-semibold
-                transition-all duration-300
+                flex-1 py-2.5 rounded-lg text-sm font-medium transition-all duration-300
                 ${
                   activeTab === tab
-                    ? "bg-[#EF4444] text-white shadow-lg"
-                    : "bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300"
+                    ? "bg-[rgb(var(--bg))] text-[rgb(var(--text))] shadow-sm"
+                    : "text-[rgb(var(--muted))]"
                 }
               `}
             >
@@ -137,14 +157,12 @@ export const MarketplaceSection = () => {
           onQueryChange={setQuery}
           onAvailabilityChange={setAvailability}
         />
-
         {/* List */}
         {loading ? (
-          <div className="py-20 text-center">
-            <div className="inline-block w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin" />
-            <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-              Loading {activeTab}...
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
           </div>
         ) : error ? (
           <div className="py-20 text-center">
@@ -154,14 +172,17 @@ export const MarketplaceSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-8 rounded-3xl border-2 border-dashed border-gray-300 dark:border-zinc-700 p-12 text-center"
+            className="mt-8 rounded-3xl border border-dashed border-[rgb(var(--border))] bg-[rgb(var(--surface))] p-12 text-center"
           >
-            <p className="text-base text-gray-500 dark:text-gray-400">
+            <p className="text-base text-[rgb(var(--muted))]">
               No matches found. Try adjusting your filters or search terms.
             </p>
           </motion.div>
         ) : (
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.div
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+          >
             <AnimatePresence mode="popLayout">
               {filtered.map(profile => (
                 <ProfileCard
@@ -184,5 +205,15 @@ export const MarketplaceSection = () => {
         )}
       </LayoutContainer>
     </section>
+  );
+};
+
+export const MarketplaceSection = () => {
+  return (
+    <Suspense
+      fallback={<div className="py-20 text-center">Loading marketplace...</div>}
+    >
+      <MarketplaceContent />
+    </Suspense>
   );
 };

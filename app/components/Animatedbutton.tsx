@@ -20,28 +20,26 @@ const Animatedbutton: React.FC<AnimatedButtonProps> = ({
 }) => {
   const variants = {
     primary: `
-      relative overflow-hidden
-      bg-gradient-to-br from-red-500 to-red-600
-      text-white
-      hover:from-red-600 hover:to-red-700
-      dark:from-red-500 dark:to-red-600
-      dark:hover:from-red-600 dark:hover:to-red-700
-      shadow-lg shadow-red-500/25
-      hover:shadow-xl hover:shadow-red-500/40
-      before:absolute before:inset-0
-      before:bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.3),transparent_70%)]
-      before:opacity-0 hover:before:opacity-100
-      before:transition-opacity before:duration-300
-    `,
+  relative overflow-hidden
+  bg-[rgb(var(--accent))] 
+  text-white
+  font-semibold tracking-wide
+  shadow-[0_0_20px_-5px_rgb(var(--accent)/0.5)]
+  hover:shadow-[0_0_25px_-5px_rgb(var(--accent)/0.6)]
+  hover:bg-[rgb(var(--accent-hover))]
+  hover:-translate-y-0.5
+  transition-all duration-300 ease-out
+`,
     secondary: `
-      relative overflow-hidden
-      bg-white dark:bg-zinc-800
-      text-gray-900 dark:text-white
-      border-2 border-gray-200 dark:border-zinc-700
-      hover:border-red-500 dark:hover:border-red-500
-      hover:text-red-600 dark:hover:text-red-400
-      shadow-md hover:shadow-lg
-    `,
+  relative overflow-hidden
+  bg-transparent
+  text-[rgb(var(--text))]
+  border border-[rgb(var(--border))]
+  hover:border-[rgb(var(--accent))]
+  hover:text-[rgb(var(--accent))]
+  hover:bg-[rgb(var(--accent)/0.05)]
+  transition-all duration-300
+`,
     ghost: `
       relative overflow-hidden
       bg-transparent

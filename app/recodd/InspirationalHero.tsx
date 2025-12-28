@@ -29,42 +29,29 @@ export const InspirationalHero = () => {
         relative
         w-full
         overflow-hidden
-        border-b border-gray-200 dark:border-zinc-800
-        bg-white dark:bg-black
+        border-b border-[rgb(var(--border))]
+        bg-[rgb(var(--bg))]
       "
     >
-      {/* Animated background blobs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30 dark:opacity-100">
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.1, 0.15, 0.1],
+      {/* NEW BACKGROUND: "Trust Grid" 
+        Replaces the old animated blobs with a technical, structured grid.
+      */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div
+          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+          style={{
+            backgroundImage: `linear-gradient(rgb(var(--text)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--text)) 1px, transparent 1px)`,
+            backgroundSize: "32px 32px",
           }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-20 left-10 w-72 h-72 bg-red-500/10 dark:bg-red-500/5 rounded-full blur-3xl"
         />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.12, 0.2, 0.12],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute bottom-20 right-10 w-96 h-96 bg-red-600/10 dark:bg-red-600/5 rounded-full blur-3xl"
-        />
+        {/* Fade overlay to blend grid into the bottom of the section */}
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-[rgb(var(--bg))]" />
       </div>
 
-      <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 lg:px-20 py-12 sm:py-16 md:py-20 lg:py-24">
-        <div className="grid lg:grid-cols-[1fr,0.8fr] gap-8 md:gap-10 lg:gap-12 items-center max-w-7xl mx-auto">
-          {/* LEFT: heading + CTAs */}
-          <div className="space-y-4 sm:space-y-5 md:space-y-6 max-w-2xl">
+      <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 lg:px-12 py-12 sm:py-16 md:py-24">
+        <div className="grid lg:grid-cols-[1.2fr,1fr] gap-12 md:gap-16 lg:gap-20 items-center max-w-[1600px] mx-auto">
+          {/* LEFT: Heading + CTAs */}
+          <div className="space-y-6 sm:space-y-5 md:space-y-6 max-w-2xl">
             {/* Animated heading */}
             <div className="h-16 sm:h-20 md:h-24 lg:h-28 flex items-center overflow-hidden">
               <AnimatePresence mode="wait">
@@ -74,7 +61,7 @@ export const InspirationalHero = () => {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -40, opacity: 0 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight"
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[rgb(var(--text))] leading-tight tracking-tight"
                 >
                   {rotating[index]}
                 </motion.h1>
@@ -82,7 +69,7 @@ export const InspirationalHero = () => {
             </div>
 
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 rounded-full border border-red-200 dark:border-red-500/20">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest text-[rgb(var(--accent))] bg-red-50 dark:bg-red-500/10 rounded-full border border-red-200 dark:border-red-500/20">
               <Aperture
                 size={14}
                 className="animate-spin sm:w-4 sm:h-4"
@@ -95,7 +82,7 @@ export const InspirationalHero = () => {
             </div>
 
             {/* Description */}
-            <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-xl leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-[rgb(var(--muted))] max-w-xl leading-relaxed">
               Recodd connects freelancers and organizations without middlemen,
               fees, or friction. You keep what you earn. They get work that
               actually gets done.
@@ -117,77 +104,84 @@ export const InspirationalHero = () => {
               </Animatedbutton>
             </div>
 
-            <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-[10px] sm:text-xs text-[rgb(var(--muted))]">
               No platform fees · You negotiate directly · Built for long-term
               work
             </p>
           </div>
 
-          {/* RIGHT: stats card */}
+          {/* RIGHT: Stats card (Refined "Nested Surface" Look) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="
-              rounded-2xl sm:rounded-3xl
-              bg-gray-50 dark:bg-zinc-900/50
-              backdrop-blur-xl
-              border border-gray-200 dark:border-zinc-800
-              p-5 sm:p-6 md:p-8
-              shadow-xl
+              rounded-3xl
+              bg-[rgb(var(--surface))] /* Uses the lighter surface color */
+              p-1 /* Creates the 'gap' between outer and inner box */
+              shadow-2xl shadow-black/10 dark:shadow-black/50
               w-full
             "
           >
-            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest text-gray-500 dark:text-gray-400 mb-4 sm:mb-6">
-              Live Snapshot
-            </p>
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
-              {[
-                {
-                  value: "120+",
-                  label: "Active freelancers",
-                  gradient: "from-blue-500 to-cyan-500",
-                },
-                {
-                  value: "80+",
-                  label: "Open briefs",
-                  gradient: "from-purple-500 to-pink-500",
-                },
-                {
-                  value: "0%",
-                  label: "Platform fee",
-                  gradient: "from-red-500 to-orange-500",
-                },
-              ].map((stat, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="
-                    relative
-                    rounded-xl sm:rounded-2xl
-                    bg-white dark:bg-zinc-800
-                    border border-gray-200 dark:border-zinc-700
-                    p-3 sm:p-4
-                    text-center
-                    group
-                    cursor-default
-                  "
-                >
-                  <div
-                    className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-linear-to-br ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
-                  />
-                  <p className="relative text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-0.5 sm:mb-1">
-                    {stat.value}
-                  </p>
-                  <p className="relative text-[9px] sm:text-xs text-gray-600 dark:text-gray-400 leading-tight">
-                    {stat.label}
-                  </p>
-                </motion.div>
-              ))}
+            <div
+              className="
+                rounded-[20px] 
+                border border-[rgb(var(--border))] 
+                bg-[rgb(var(--bg))] 
+                p-6 sm:p-8
+              "
+            >
+              <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[rgb(var(--muted))] mb-6">
+                Live Snapshot
+              </p>
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4">
+                {[
+                  {
+                    value: "120+",
+                    label: "Active freelancers",
+                    gradient: "from-blue-500 to-cyan-500",
+                  },
+                  {
+                    value: "80+",
+                    label: "Open briefs",
+                    gradient: "from-purple-500 to-pink-500",
+                  },
+                  {
+                    value: "0%",
+                    label: "Platform fee",
+                    gradient: "from-red-500 to-orange-500",
+                  },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    whileHover={{ scale: 1.05 }}
+                    className="
+                      relative
+                      rounded-xl sm:rounded-2xl
+                      bg-[rgb(var(--surface))]
+                      border border-[rgb(var(--border))]
+                      p-3 sm:p-4
+                      text-center
+                      group
+                      cursor-default
+                    "
+                  >
+                    <div
+                      className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-linear-to-br ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                    />
+                    <p className="relative text-xl sm:text-2xl font-bold text-[rgb(var(--text))] mb-0.5 sm:mb-1">
+                      {stat.value}
+                    </p>
+                    <p className="relative text-[9px] sm:text-xs text-[rgb(var(--muted))] leading-tight">
+                      {stat.label}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
