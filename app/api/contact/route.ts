@@ -1,15 +1,16 @@
+// app/api/contact/route.ts
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-import { supabase } from "@/lib/supabaseClient";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { email, message, profileId, profileType } = body;
 
-    // 1. Validation
+    console.log("📩 Contact form received:", { email, profileId, profileType });
+
+    // Validation
     if (!email || !message || !profileId || !profileType) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -17,44 +18,99 @@ export async function POST(req: Request) {
       );
     }
 
-    // Save to DB
-    const { error } = await supabase.from("contact_requests").insert([
-      {
-        sender_email: email,
-        message,
-        profile_id: Number(profileId),
-        profile_type: profileType,
-      },
-    ]);
+    // Get environment variables - check both naming conventions
+    const supabaseUrl =
+      process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey =
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const resendKey = process.env.RESEND_API_KEY;
+    const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL;
 
-    if (error) {
-      console.error("Supabase error : ", error);
-      throw new Error("DB insert failed");
-    }
-
-    // send email
-    await resend.emails.send({
-      from: "Recodd <onboarding@resend.dev>",
-      to: process.env.CONTACT_RECEIVER_EMAIL!,
-      replyTo: email,
-      subject: `New ${profileType} contact request`,
-      html: `
-        <div style="font-family: Arial, sans-serif;">
-          <h2>New Contact Request</h2>
-          <p><strong>From:</strong> ${email}</p>
-          <p><strong>Profile:</strong> ${profileType} (ID: ${profileId})</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
-        </div>
-      `,
+    console.log("🔍 Environment check:", {
+      hasSupabaseUrl: !!supabaseUrl,
+      hasSupabaseKey: !!supabaseKey,
+      hasResendKey: !!resendKey,
+      hasReceiverEmail: !!receiverEmail,
+      supabaseUrl: supabaseUrl || "NOT FOUND",
     });
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Email error:", error);
+    // Check Supabase config
+    if (!supabaseUrl || !supabaseKey) {
+      console.error("❌ Supabase environment variables not found!");
+      return NextResponse.json(
+        { error: "Database not configured" },
+        { status: 500 }
+      );
+    }
 
+    // Create Supabase client
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Save to Database
+    console.log("💾 Attempting database insert...");
+    const { data: dbData, error: dbError } = await supabase
+      .from("contact_requests")
+      .insert({
+        sender_email: email,
+        message: message,
+        profile_id: Number(profileId),
+        profile_type: profileType,
+      })
+      .select();
+
+    if (dbError) {
+      console.error("❌ Database error:", dbError);
+      return NextResponse.json(
+        { error: "Database error: " + dbError.message },
+        { status: 500 }
+      );
+    }
+
+    console.log("✅ Saved to database:", dbData);
+
+    // Send Email (optional)
+    if (resendKey && receiverEmail) {
+      try {
+        console.log("📧 Sending email...");
+        const resend = new Resend(resendKey);
+
+        await resend.emails.send({
+          from: "Recodd <onboarding@resend.dev>",
+          to: receiverEmail,
+          replyTo: email,
+          subject: `New ${profileType} contact request`,
+          html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+              <h2>New Contact Request</h2>
+              <p><strong>From:</strong> ${email}</p>
+              <p><strong>Profile:</strong> ${profileType} (ID: ${profileId})</p>
+              <hr style="margin: 20px 0;">
+              <p><strong>Message:</strong></p>
+              <p style="padding: 10px; background: #f5f5f5; border-left: 4px solid #4F46E5;">${message}</p>
+            </div>
+          `,
+        });
+        console.log("✅ Email sent successfully");
+      } catch (emailError) {
+        console.error("⚠️ Email failed (but DB saved):", emailError);
+      }
+    } else {
+      console.log("⚠️ Email service not configured, skipping...");
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Contact request submitted successfully",
+    });
+  } catch (error) {
+    console.error("❌ Unexpected error:", error);
     return NextResponse.json(
-      { error: "Failed to send email" },
+      {
+        error:
+          "Server error: " +
+          (error instanceof Error ? error.message : "Unknown"),
+      },
       { status: 500 }
     );
   }
