@@ -134,7 +134,7 @@ export default function RecoddApp() {
                   },
                 ].map(column => (
                   <div key={column.title}>
-                    <h3 className="font-bold text-blacktext-zinc-900 dark:text-zinc-500 tracking-tight mb-4">
+                    <h3 className="font-bold text-zinc-900 dark:text-zinc-500 tracking-tight mb-4">
                       {column.title}
                     </h3>
                     <ul className="space-y-3">

@@ -2,15 +2,43 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createClient } from "@supabase/supabase-js";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const redis = Redis.fromEnv();
+
+const ratelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, "1 m"), // 5 requests per minute
+});
+
+const escapeHtml = (value: unknown) => {
+  if (value === null || value === undefined) return "";
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+};
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+
+    const { success } = await ratelimit.limit(`contact:${ip}`);
+
+    if (!success) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const { email, message, profileId, profileType } = body;
 
-    console.log("📩 Contact form received:", { email, profileId, profileType });
-
-    // Validation
     if (!email || !message || !profileId || !profileType) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -19,11 +47,9 @@ export async function POST(req: Request) {
     }
 
     // Get environment variables - check both naming conventions
-    const supabaseUrl =
-      process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.SUPABASE_URL;
     const supabaseKey =
-      process.env.SUPABASE_ANON_KEY ||
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
     const resendKey = process.env.RESEND_API_KEY;
     const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL;
 
@@ -32,7 +58,6 @@ export async function POST(req: Request) {
       hasSupabaseKey: !!supabaseKey,
       hasResendKey: !!resendKey,
       hasReceiverEmail: !!receiverEmail,
-      supabaseUrl: supabaseUrl || "NOT FOUND",
     });
 
     // Check Supabase config
@@ -74,20 +99,26 @@ export async function POST(req: Request) {
       try {
         console.log("📧 Sending email...");
         const resend = new Resend(resendKey);
+        const resendFrom =
+          process.env.RESEND_FROM_EMAIL || "Recodd <noreply@recodd.com>";
 
         await resend.emails.send({
-          from: "Recodd <onboarding@resend.dev>",
+          from: resendFrom,
           to: receiverEmail,
           replyTo: email,
-          subject: `New ${profileType} contact request`,
+          subject: `New ${escapeHtml(String(profileType))} contact request`,
           html: `
             <div style="font-family: Arial, sans-serif; padding: 20px;">
               <h2>New Contact Request</h2>
-              <p><strong>From:</strong> ${email}</p>
-              <p><strong>Profile:</strong> ${profileType} (ID: ${profileId})</p>
+              <p><strong>From:</strong> ${escapeHtml(email)}</p>
+              <p><strong>Profile:</strong> ${escapeHtml(
+                profileType
+              )} (ID: ${escapeHtml(profileId)})</p>
               <hr style="margin: 20px 0;">
               <p><strong>Message:</strong></p>
-              <p style="padding: 10px; background: #f5f5f5; border-left: 4px solid #4F46E5;">${message}</p>
+              <p style="padding: 10px; background: #f5f5f5; border-left: 4px solid #4F46E5;">${escapeHtml(
+                message
+              )}</p>
             </div>
           `,
         });
