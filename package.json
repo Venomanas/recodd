@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
+    "@upstash/ratelimit": "^2.0.7",
+    "@upstash/redis": "^1.36.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.556.0",
-    "next": "16.0.8",
+    "next": "^16.1.1",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-icon": "^1.0.0",
