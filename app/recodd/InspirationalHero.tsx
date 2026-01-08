@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import { Aperture } from "lucide-react";
+import Link from "next/link";
 
 const rotating = [
   "Connect with top talent.",
@@ -91,12 +92,14 @@ export const InspirationalHero = () => {
             {/* CTAs */}
             <div className="space-y-4">
               <div className="flex flex-col xs:flex-row flex-wrap gap-4 sm:gap-4 pt-4">
-                <Animatedbutton
-                  variant="primary"
-                  className="w-full xs:w-auto justify-center px-8 py-4 text-base"
-                >
-                  Get started as Freelancer
-                </Animatedbutton>
+                <Link href="/dashboard/freelancer">
+                  <Animatedbutton
+                    variant="primary"
+                    className="w-full xs:w-auto justify-center px-8 py-4 text-base"
+                  >
+                    Get started as Freelancer
+                  </Animatedbutton>
+                </Link>
                 <Animatedbutton
                   variant="secondary"
                   className="w-full xs:w-auto justify-center px-8 py-4 text-base"
