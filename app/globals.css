@@ -1,25 +1,31 @@
 @import "tailwindcss";
 
 :root {
+  /* Premium Zinc Palette - Light Mode */
   --bg: 255 255 255;
-  --surface: 244 244 245;
-  --text: 24 24 27;
-  --muted: 113 113 122;
+  --surface: 250 250 250; /* slightly off-white for depth */
+  --text: 9 9 11; /* deeper black for better contrast */
+  --muted: 82 82 91;
   --border: 228 228 231;
 
   --accent: 225 29 72;
   --accent-hover: 190 18 60;
+
+  --glass-border: rgba(228, 228, 231, 0.5);
 }
 
 .dark {
-  --bg: 9 9 11;
-  --surface: 24 24 27;
+  /* Premium Zinc Palette - Dark Mode */
+  --bg: 9 9 11; /* Zinc 950 */
+  --surface: 24 24 27; /* Zinc 900 */
   --text: 250 250 250;
   --muted: 161 161 170;
   --border: 39 39 42;
 
-  --accent: 239 68 68;
-  --accent-hover: 248 113 113;
+  --accent: 244 63 94; /* slightly brighter for dark mode */
+  --accent-hover: 225 29 72;
+
+  --glass-border: rgba(39, 39, 42, 0.5);
 }
 
 @theme inline {
@@ -31,18 +37,38 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #09090b;
+    --foreground: #fafafa;
   }
 }
 
 body {
-  background: rgb(var(--bg));
+  background-color: rgb(var(--bg));
   color: rgb(var(--text));
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* smoother easing */
   letter-spacing: -0.015em;
   -webkit-font-smoothing: antialiased;
+
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
+  width: 100vw;
+
+  /* Subtle texture for depth */
+  background-image:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(var(--accent), 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(var(--surface), 0.5) 0%,
+      transparent 50%
+    );
+  background-attachment: fixed;
 }
 
 /* Custom scrollbar */
@@ -51,16 +77,18 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(var(--surface));
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(var(--accent));
-  border-radius: 5px;
+  background: rgba(113, 113, 122, 0.2);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(var(--accent-hover));
+  background: rgba(113, 113, 122, 0.4);
 }
 
 /* Smooth focus rings */
@@ -70,32 +98,8 @@ body {
   border-radius: 4px;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  /* Match the page background so it feels transparent */
-  background: transparent; 
-}
-
-::-webkit-scrollbar-thumb {
-  /* Subtle gray that works in both light/dark modes */
-  background-color: rgba(113, 113, 122, 0.3); /* Zinc-500 low opacity */
-  border-radius: 9999px;
-  /* Adds a border around the thumb to create "padding" effect */
-  border: 3px solid transparent;
-  background-clip: content-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  /* Slightly darker on hover */
-  background-color: rgba(113, 113, 122, 0.6);
-}
-
 /* Firefox support */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(113, 113, 122, 0.3) transparent;
+  scrollbar-color: rgba(113, 113, 122, 0.2) transparent;
 }

@@ -17,10 +17,9 @@ export const ProfileCard = ({ profile, mode, onContact }: Props) => {
 
   return (
     <motion.article
-      layout
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10%" }}
+      viewport={{ once: true }}
       className="
         group relative 
         rounded-3xl 
@@ -28,111 +27,103 @@ export const ProfileCard = ({ profile, mode, onContact }: Props) => {
         p-1
         transition-all duration-300
         hover:shadow-xl hover:shadow-black/5
+        bg-opacity-50 backdrop-blur-sm
       "
     >
-      <div className="h-full rounded-[20px] bg-[rgb(var(--bg))] p-5 border border-[rgb(var(--border))] group-hover:border-[rgb(var(--accent))/30] transition-colors duration-300">
-        <div className="flex gap-4">
-          {/* Avatar - Squircle Shape for Modern Tech feel */}
-          <div className="shrink-0">
-            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center text-[rgb(var(--muted))] shadow-inner border border-[rgb(var(--border))]">
-              <User className="w-6 h-6" />
+      <div className="h-full rounded-[20px] bg-[rgb(var(--bg))] p-5 sm:p-6 border border-[rgb(var(--border))] group-hover:border-[rgb(var(--accent))/30] transition-colors duration-300 flex flex-col">
+        <div className="flex gap-4 items-start">
+          {/* Avatar - Real Image */}
+          <div className="shrink-0 relative">
+            <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-sm border border-[rgb(var(--border))] group-hover:scale-105 transition-transform duration-300">
+              <img
+                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.name}`}
+                alt={profile.name}
+                className="w-full h-full object-cover bg-zinc-100 dark:bg-zinc-800"
+              />
             </div>
           </div>
 
-          {/* Header Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-base font-semibold text-[rgb(var(--text))] truncate tracking-tight">
-                  {profile.name}
-                </h3>
-                <p className="text-sm text-[rgb(var(--muted))] flex items-center gap-1.5 mt-1">
-                  <Briefcase size={14} />
-                  <span className="truncate">{profile.role}</span>
-                </p>
-              </div>
-
-              {/* Availability Badge - Now Clean & Monotone */}
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-[rgb(var(--surface))] text-[10px] font-medium text-[rgb(var(--text))] border border-[rgb(var(--border))] uppercase tracking-wide">
-                {profile.availability || "Flexible"}
+          <div className="min-w-0 flex-1 pt-1">
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <h3 className="font-bold text-lg text-[rgb(var(--text))] truncate leading-tight group-hover:text-[rgb(var(--accent))] transition-colors">
+                {profile.name}
+              </h3>
+              <span className="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[rgb(var(--surface))] text-[rgb(var(--muted))] border border-[rgb(var(--border))]">
+                {mode === "business" ? "Project" : "Pro"}
               </span>
+            </div>
+
+            <div className="flex items-center gap-1.5 text-xs text-[rgb(var(--muted))] mb-3">
+              <Briefcase size={12} className="shrink-0" />
+              <span className="truncate">{profile.role}</span>
             </div>
           </div>
         </div>
 
-        {/* Metadata Grid */}
-        <div className="mt-5 flex flex-wrap gap-y-2 gap-x-4 text-xs text-[rgb(var(--muted))] py-4 border-t border-b border-[rgb(var(--border))] border-dashed">
-          <span className="flex items-center gap-1.5">
-            <Clock size={14} />
-            {profile.experience}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <MapPin size={14} />
-            {profile.location || "Remote"}
-          </span>
-          <span className="font-semibold text-[rgb(var(--text))] ml-auto">
+        {/* Separator */}
+        <div className="h-px w-full bg-linear-to-r from-transparent via-[rgb(var(--border))] to-transparent my-4 opacity-50" />
+
+        {/* Details Grid - More compact */}
+        <div className="grid grid-cols-2 gap-y-3 gap-x-2 text-xs mb-5">
+          <div className="flex items-center gap-2 text-[rgb(var(--muted))]">
+            <Clock size={13} className="shrink-0 opacity-70" />
+            <span className="truncate">{profile.experience}</span>
+          </div>
+          <div className="flex items-center gap-2 text-[rgb(var(--muted))]">
+            <MapPin size={13} className="shrink-0 opacity-70" />
+            <span className="truncate">{profile.location}</span>
+          </div>
+        </div>
+
+        <div className="mt-auto flex items-center justify-between">
+          <span className="font-bold text-sm text-[rgb(var(--text))]">
             {profile.budget}
           </span>
         </div>
 
         {/* Tags */}
-        <div className="mt-4 flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1.5 mt-4 mb-5 h-14 overflow-hidden content-start">
           {profile.tags?.slice(0, 3).map(tag => (
             <span
               key={tag}
-              className="px-2.5 py-1 rounded-md bg-[rgb(var(--surface))] text-[11px] font-medium text-[rgb(var(--muted))]"
+              className="
+                px-2.5 py-1 
+                rounded-md 
+                text-[10px] font-medium 
+                bg-[rgb(var(--surface))] 
+                text-[rgb(var(--muted))] 
+                border border-[rgb(var(--border))]
+                group-hover:border-[rgb(var(--accent))/20]
+                transition-colors
+              "
             >
               {tag}
             </span>
           ))}
           {profile.tags && profile.tags.length > 3 && (
-            <span className="px-2.5 py-1 text-[11px] text-[rgb(var(--muted))]">
+            <span className="px-2 py-1 rounded-md text-[10px] font-medium bg-[rgb(var(--surface))] text-[rgb(var(--muted))] border border-[rgb(var(--border))]">
               +{profile.tags.length - 3}
             </span>
           )}
         </div>
 
         {/* Actions */}
-        <div className="mt-6 flex gap-3">
-          {isFreelancer ? (
-            <>
-              <Link href={`/freelancer/${profile.id}`} className="flex-1">
-                <Animatedbutton
-                  variant="secondary"
-                  className="w-full justify-center"
-                >
-                  View
-                </Animatedbutton>
-              </Link>
-              <div className="flex-1" onClick={onContact}>
-                <Animatedbutton
-                  variant="primary"
-                  className="w-full justify-center"
-                >
-                  Invite
-                </Animatedbutton>
-              </div>
-            </>
-          ) : (
-            <>
-              <Link href={`/business/${profile.id}`} className="flex-1">
-                <Animatedbutton
-                  variant="secondary"
-                  className="w-full justify-center"
-                >
-                  Brief
-                </Animatedbutton>
-              </Link>
-              <div className="flex-1" onClick={onContact}>
-                <Animatedbutton
-                  variant="primary"
-                  className="w-full justify-center"
-                >
-                  Apply
-                </Animatedbutton>
-              </div>
-            </>
-          )}
+        <div className="grid grid-cols-2 gap-3 mt-auto">
+          <Animatedbutton
+            variant="secondary"
+            className="w-full justify-center py-2 text-xs h-9 rounded-xl border-[rgb(var(--border))]"
+            onClick={() => {}}
+          >
+            {mode === "business" ? "View Brief" : "View Profile"}
+          </Animatedbutton>
+
+          <Animatedbutton
+            variant="primary"
+            className="w-full justify-center py-2 text-xs h-9 rounded-xl bg-rose-600 hover:bg-rose-700 text-white shadow-lg shadow-rose-600/20 border-transparent"
+            onClick={onContact}
+          >
+            {mode === "business" ? "Apply Now" : "Contact"}
+          </Animatedbutton>
         </div>
       </div>
     </motion.article>
