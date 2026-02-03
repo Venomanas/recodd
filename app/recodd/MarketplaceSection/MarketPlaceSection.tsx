@@ -20,21 +20,36 @@ type Tab = "freelancers" | "business";
 
 // We wrap the content in a separate component to safely use useSearchParams
 
-const MarketplaceContent = () => {
-  const [query, setQuery] = useState("");
+export const MarketplaceContent = ({
+  forcedTab,
+}: {
+  forcedTab?: "freelancers" | "business";
+}) => {
+  const SearchParams = useSearchParams();
+  const queryParam = SearchParams.get("q");
+  const typeParam = SearchParams.get("type");
+
+  const [query, setQuery] = useState(queryParam || "");
   const [availability, setAvailability] = useState<string>("all");
   const [data, setData] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
-  const SearchParams = useSearchParams();
-  const typeParam = SearchParams.get("type");
+
   const initialTab: "freelancers" | "business" =
-    typeParam === "business" ? "business" : "freelancers";
+    forcedTab || (typeParam === "business" ? "business" : "freelancers");
 
   const [activeTab, setActiveTab] = useState<"freelancers" | "business">(
-    initialTab
+    initialTab,
   );
+
+  // Update query when URL parameter changes
+  useEffect(() => {
+    const urlQuery = SearchParams.get("q");
+    if (urlQuery) {
+      setQuery(urlQuery);
+    }
+  }, [SearchParams]);
 
   useEffect(() => {
     const type = SearchParams.get("type");
