@@ -5,9 +5,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com", // Fixed: correct domain
-        port: "",
-        pathname: "/**", // Allows all paths from this domain
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
       },
     ],
   },

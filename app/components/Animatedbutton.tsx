@@ -20,46 +20,45 @@ const Animatedbutton: React.FC<AnimatedButtonProps> = ({
 }) => {
   const variants = {
     primary: `
-  relative overflow-hidden
-  bg-[rgb(var(--accent))] 
-  text-white
-  font-semibold tracking-wide
-  shadow-[0_0_20px_-5px_rgb(var(--accent)/0.5)]
-  hover:shadow-[0_0_25px_-5px_rgb(var(--accent)/0.6)]
-  hover:bg-[rgb(var(--accent-hover))]
-  hover:-translate-y-0.5
-  transition-all duration-300 ease-out
-`,
+      relative overflow-hidden
+      bg-[rgb(var(--accent))] 
+      text-white
+      font-semibold tracking-wide
+      rounded-md
+      shadow-sm
+      hover:bg-[rgb(var(--accent-hover))]
+      hover:-translate-y-0.5
+      transition-all duration-200 ease-out
+    `,
     secondary: `
-  relative overflow-hidden
-  bg-transparent
-  text-[rgb(var(--text))]
-  border border-[rgb(var(--border))]
-  hover:border-[rgb(var(--accent))]
-  hover:text-[rgb(var(--accent))]
-  hover:bg-[rgb(var(--accent)/0.05)]
-  transition-all duration-300
-`,
+      relative overflow-hidden
+      bg-transparent
+      text-[rgb(var(--accent))]
+      border border-[rgb(var(--accent))]
+      rounded-md
+      hover:bg-[rgb(var(--accent)/0.05)]
+      transition-all duration-200
+    `,
     ghost: `
       relative overflow-hidden
       bg-transparent
-      text-gray-700 dark:text-gray-300
-      border border-gray-300 dark:border-zinc-600
-      hover:bg-gray-100 dark:hover:bg-zinc-800
-      hover:border-gray-400 dark:hover:border-zinc-500
+      text-[rgb(var(--text-secondary))]
+      rounded-md
+      hover:bg-[rgb(var(--muted)/0.1)]
+      transition-all duration-200
     `,
   };
 
   return (
     <motion.button
-      whileHover={disabled ? undefined : { scale: 1.05, y: -2 }}
-      whileTap={disabled ? undefined : { scale: 0.95, y: 0 }}
+      whileHover={disabled ? undefined : { scale: 1.02 }}
+      whileTap={disabled ? undefined : { scale: 0.98 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
       className={clsx(
-        "px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300",
+        "px-6 py-2.5 text-sm font-medium transition-all duration-300",
         variants[variant],
         disabled && "opacity-50 cursor-not-allowed hover:scale-100",
-        className
+        className,
       )}
       disabled={disabled}
       {...rest}

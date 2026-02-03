@@ -1,79 +1,76 @@
 @import "tailwindcss";
 
 :root {
-  /* Premium Zinc Palette - Light Mode */
-  --bg: 255 255 255;
-  --surface: 250 250 250; /* slightly off-white for depth */
-  --text: 9 9 11; /* deeper black for better contrast */
-  --muted: 82 82 91;
-  --border: 228 228 231;
+  /* Professional Palette - Light Mode */
+  --bg: 250 250 249; /* #FAFAF9 (Warm Gray 50) */
+  --surface: 255 255 255; /* #FFFFFF */
+  --text: 15 23 42; /* #0F172A (Slate 900) */
+  --text-secondary: 71 85 105; /* #475569 (Slate 600) */
+  --muted: 148 163 184; /* #94A3B8 (Slate 400) */
+  --border: 226 232 240; /* #E2E8F0 (Slate 200) */
 
-  --accent: 225 29 72;
-  --accent-hover: 190 18 60;
+  --primary: 15 23 42; /* #0F172A (Slate 900) - Deep Navy */
+  --primary-foreground: 248 250 252; /* #F8FAFC (Slate 50) */
 
-  --glass-border: rgba(228, 228, 231, 0.5);
+  --accent: 249 115 22; /* #F97316 (Orange 500) - Coral/Terracotta */
+  --accent-hover: 234 88 12; /* #EA580C (Orange 600) */
+  --accent-foreground: 255 255 255;
+
+  --success: 16 185 129; /* #10B981 (Emerald 500) */
+  --error: 239 68 68; /* #EF4444 (Red 500) */
+
+  --glass-border: rgba(226, 232, 240, 0.5);
 }
 
 .dark {
-  /* Premium Zinc Palette - Dark Mode */
-  --bg: 9 9 11; /* Zinc 950 */
-  --surface: 24 24 27; /* Zinc 900 */
-  --text: 250 250 250;
-  --muted: 161 161 170;
-  --border: 39 39 42;
+  /* Professional Palette - Dark Mode (Lighter for better UX) */
+  --bg: 24 24 27; /* #18181B (Zinc 900) - Lighter than before */
+  --surface: 39 39 42; /* #27272A (Zinc 800) - Lighter surface */
+  --text: 250 250 250; /* #FAFAFA (Zinc 50) - Softer white */
+  --text-secondary: 161 161 170; /* #A1A1AA (Zinc 400) - Better contrast */
+  --muted: 113 113 122; /* #71717A (Zinc 500) */
+  --border: 63 63 70; /* #3F3F46 (Zinc 700) - More visible borders */
 
-  --accent: 244 63 94; /* slightly brighter for dark mode */
-  --accent-hover: 225 29 72;
+  --primary: 250 250 250; /* #FAFAFA (Zinc 50) */
+  --primary-foreground: 24 24 27; /* #18181B (Zinc 900) */
 
-  --glass-border: rgba(39, 39, 42, 0.5);
+  --accent: 251 146 60; /* #FB923C (Orange 400) - Brighter for dark mode */
+  --accent-hover: 253 186 116; /* #FDBA74 (Orange 300) - Even brighter on hover */
+  --accent-foreground: 24 24 27;
+
+  --glass-border: rgba(63, 63, 70, 0.5);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #09090b;
-    --foreground: #fafafa;
+    --background: #0a0e1a;
+    --foreground: #f8fafc;
   }
 }
 
 body {
   background-color: rgb(var(--bg));
   color: rgb(var(--text));
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   transition:
-    background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-    color 0.5s cubic-bezier(0.16, 1, 0.3, 1); /* smoother easing */
-  letter-spacing: -0.015em;
+    background-color 0.3s ease,
+    color 0.3s ease;
   -webkit-font-smoothing: antialiased;
 
   /* Prevent horizontal scroll */
   overflow-x: hidden;
   width: 100vw;
-
-  /* Subtle texture for depth */
-  background-image:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(var(--accent), 0.03) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 0% 0%,
-      rgba(var(--surface), 0.5) 0%,
-      transparent 50%
-    );
-  background-attachment: fixed;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -81,17 +78,15 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(113, 113, 122, 0.2);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 99px;
-  border: 3px solid transparent;
-  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(113, 113, 122, 0.4);
+  background: rgba(148, 163, 184, 0.6);
 }
 
-/* Smooth focus rings */
+/* Sharp focus rings for accessibility */
 *:focus-visible {
   outline: 2px solid rgb(var(--accent));
   outline-offset: 2px;
@@ -101,5 +96,5 @@ body {
 /* Firefox support */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(113, 113, 122, 0.2) transparent;
+  scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
 }

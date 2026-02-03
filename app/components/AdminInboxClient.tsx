@@ -2,7 +2,19 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Clock, User, Briefcase, Inbox } from "lucide-react";
+import {
+  CheckCircle2,
+  Clock,
+  User,
+  Briefcase,
+  Inbox,
+  Archive,
+  MessageSquare,
+  ArrowLeft,
+  Trash2,
+  Mail,
+} from "lucide-react";
+import Animatedbutton from "@/app/components/Animatedbutton";
 
 type Message = {
   id: string;
@@ -14,21 +26,18 @@ type Message = {
   created_at: string;
 };
 
-// FIX: Add default empty array to props to prevent build crash
 export default function AdminInboxClient({
   messages = [],
 }: {
   messages: Message[];
 }) {
-  const [loadingId, setLoadingId] = useState<string | null>(null);
-
-  // FIX: Add safety check (messages || []) inside the state initializer
+  const [filter, setFilter] = useState<"all" | "unread" | "archived">("all");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [readMessages, setReadMessages] = useState<Set<string>>(
-    new Set((messages || []).filter(m => m.is_read).map(m => m.id))
+    new Set((messages || []).filter(m => m.is_read).map(m => m.id)),
   );
 
   const handleMarkAsRead = async (messageId: string) => {
-    setLoadingId(messageId);
     try {
       const response = await fetch("/api/admin/messages/read", {
         method: "POST",
@@ -40,159 +49,203 @@ export default function AdminInboxClient({
       }
     } catch (error) {
       console.error("Failed to mark message as read:", error);
-    } finally {
-      setLoadingId(null);
     }
   };
 
   const isRead = (id: string) => readMessages.has(id);
   const safeMessages = messages || [];
 
+  const filteredMessages = safeMessages.filter(msg => {
+    if (filter === "unread") return !isRead(msg.id);
+    if (filter === "archived") return isRead(msg.id); // Assuming read = archived for simplicity or add functionality later
+    return true;
+  });
+
+  const selectedMessage = safeMessages.find(m => m.id === selectedId);
+
   return (
-    <div className="space-y-6 max-w-4xl mx-auto py-8 px-4">
-      {/* Header Stats */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-[rgb(var(--text))] tracking-tight">
-            Inbox
-          </h1>
-          <p className="text-[rgb(var(--muted))] text-sm">
-            {safeMessages.length} total messages
-          </p>
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-80px)] bg-white dark:bg-zinc-900 mx-auto max-w-[1600px] border-x border-[rgb(var(--border))]">
+      {/* SIDEBAR */}
+      <div className="w-full lg:w-[240px] border-b lg:border-b-0 lg:border-r border-[rgb(var(--border))] p-4 bg-[rgb(var(--bg))]">
+        <div className="mb-6 px-3 pt-2">
+          <h2 className="font-bold text-lg text-[rgb(var(--text))]">Inbox</h2>
         </div>
+        <nav className="space-y-1">
+          {[
+            { id: "all", label: "All Messages", icon: Inbox },
+            { id: "unread", label: "Unread", icon: Mail },
+            { id: "archived", label: "Archived", icon: Archive },
+          ].map(item => (
+            <button
+              key={item.id}
+              onClick={() => {
+                setFilter(item.id as any);
+                setSelectedId(null);
+              }}
+              className={`
+                w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
+                ${
+                  filter === item.id
+                    ? "bg-[rgb(var(--surface))] text-[rgb(var(--text))] shadow-sm border border-[rgb(var(--border))]"
+                    : "text-[rgb(var(--muted))] hover:bg-[rgb(var(--surface))] hover:text-[rgb(var(--text))]"
+                }
+              `}
+            >
+              <div className="flex items-center gap-3">
+                <item.icon size={16} />
+                <span>{item.label}</span>
+              </div>
+              {item.id === "unread" && (
+                <span className="bg-[rgb(var(--accent))] text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                  {safeMessages.filter(m => !isRead(m.id)).length}
+                </span>
+              )}
+            </button>
+          ))}
+        </nav>
       </div>
 
-      {safeMessages.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="
-            flex flex-col items-center justify-center py-24
-            rounded-3xl
-            bg-[rgb(var(--surface))]
-            border border-dashed border-[rgb(var(--border))]
-            text-center
-          "
-        >
-          <div className="w-16 h-16 rounded-full bg-[rgb(var(--bg))] flex items-center justify-center mb-4 shadow-sm">
-            <Inbox className="w-8 h-8 text-[rgb(var(--muted))]" />
-          </div>
-          <p className="text-lg font-medium text-[rgb(var(--text))]">
-            All caught up!
-          </p>
-          <p className="text-sm text-[rgb(var(--muted))] mt-1">
-            No new messages from potential leads.
-          </p>
-        </motion.div>
-      ) : (
-        <div className="space-y-4">
-          <AnimatePresence initial={false}>
-            {safeMessages.map((msg, index) => {
-              const read = isRead(msg.id);
-              return (
-                <motion.div
-                  key={msg.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  layout
-                  className={`
-                    group relative rounded-2xl border p-5 transition-all duration-300
-                    ${
-                      read
-                        ? "bg-[rgb(var(--bg))] border-[rgb(var(--border))]"
-                        : "bg-white dark:bg-zinc-900 border-[rgb(var(--accent))]/30 shadow-sm shadow-red-500/5"
-                    }
-                  `}
+      {/* MAIN CONTENT */}
+      <div className="flex-1 flex overflow-hidden">
+        {selectedMessage ? (
+          /* MESSAGE DETAIL VIEW */
+          <div className="flex-1 flex flex-col h-full bg-white dark:bg-zinc-900">
+            <div className="p-4 border-b border-[rgb(var(--border))] flex items-center justify-between bg-[rgb(var(--surface))]">
+              <button
+                onClick={() => setSelectedId(null)}
+                className="flex items-center gap-2 text-sm font-medium text-[rgb(var(--muted))] hover:text-[rgb(var(--text))]"
+              >
+                <ArrowLeft size={16} /> Back
+              </button>
+              <div className="flex gap-2">
+                <button
+                  className="p-2 rounded-lg hover:bg-[rgb(var(--bg))] text-[rgb(var(--muted))] hover:text-red-500"
+                  title="Delete"
                 >
-                  {!read && (
-                    <div className="absolute left-0 top-6 bottom-6 w-1 bg-[rgb(var(--accent))] rounded-r-full" />
-                  )}
+                  <Trash2 size={18} />
+                </button>
+                <button
+                  className="p-2 rounded-lg hover:bg-[rgb(var(--bg))] text-[rgb(var(--muted))] hover:text-[rgb(var(--text))]"
+                  title="Archive"
+                >
+                  <Archive size={18} />
+                </button>
+              </div>
+            </div>
 
-                  <div className="flex flex-col md:flex-row gap-6">
-                    <div className="flex-1 space-y-3 pl-2">
-                      <div className="flex flex-wrap items-center gap-3 text-xs">
-                        <span
-                          className={`
-                          flex items-center gap-1.5 px-2 py-1 rounded-md border font-medium uppercase tracking-wider
-                          ${
-                            msg.profile_type === "freelancer"
-                              ? "bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800"
-                              : "bg-purple-50 dark:bg-purple-900/10 text-purple-600 dark:text-purple-400 border-purple-100 dark:border-purple-800"
-                          }
-                        `}
-                        >
-                          {msg.profile_type === "freelancer" ? (
-                            <User size={12} />
-                          ) : (
-                            <Briefcase size={12} />
-                          )}
-                          {msg.profile_type} #{msg.profile_id}
-                        </span>
-                        <span className="flex items-center gap-1 text-[rgb(var(--muted))]">
-                          <Clock size={12} />
-                          {new Date(msg.created_at).toLocaleDateString(
-                            undefined,
-                            {
-                              month: "short",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
-                        </span>
-                      </div>
-
-                      <div>
-                        <h3
-                          className={`text-base font-semibold text-[rgb(var(--text))] ${
-                            !read ? "font-bold" : ""
-                          }`}
-                        >
-                          {msg.sender_email}
-                        </h3>
-                      </div>
-
-                      <p className="text-sm text-[rgb(var(--muted))] leading-relaxed">
-                        {msg.message}
-                      </p>
+            <div className="flex-1 overflow-y-auto p-8 md:p-12">
+              <div className="max-w-3xl mx-auto space-y-8">
+                {/* Sender Card */}
+                <div className="flex items-start justify-between gap-4 pb-8 border-b border-[rgb(var(--border))]">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[rgb(var(--surface))] border border-[rgb(var(--border))] flex items-center justify-center text-[rgb(var(--text-secondary))]">
+                      <User size={24} />
                     </div>
-
-                    <div className="md:self-center shrink-0">
-                      {!read ? (
-                        <button
-                          onClick={() => handleMarkAsRead(msg.id)}
-                          disabled={loadingId === msg.id}
-                          className="
-                            flex items-center gap-2 px-4 py-2 rounded-xl
-                            text-xs font-medium
-                            bg-[rgb(var(--accent))] text-white
-                            hover:bg-[rgb(var(--accent-hover))]
-                            shadow-lg shadow-red-500/20
-                            transition-all
-                          "
-                        >
-                          {loadingId === msg.id ? (
-                            <span className="opacity-80">Syncing...</span>
-                          ) : (
-                            <>
-                              <CheckCircle2 size={14} /> Mark Read
-                            </>
-                          )}
-                        </button>
-                      ) : (
-                        <div className="flex items-center gap-2 px-4 py-2 text-xs font-medium text-emerald-600 bg-emerald-50 dark:bg-emerald-900/10 rounded-xl border border-emerald-100 dark:border-emerald-900/20 opacity-75">
-                          <CheckCircle2 size={14} /> Read
-                        </div>
-                      )}
+                    <div>
+                      <h3 className="text-xl font-bold text-[rgb(var(--text))]">
+                        {selectedMessage.sender_email}
+                      </h3>
+                      <div className="flex items-center gap-2 text-sm text-[rgb(var(--muted))]">
+                        <span>
+                          {selectedMessage.profile_type === "freelancer"
+                            ? "Freelancer"
+                            : "Business"}{" "}
+                          #{selectedMessage.profile_id}
+                        </span>
+                        <span>•</span>
+                        <span>
+                          {new Date(
+                            selectedMessage.created_at,
+                          ).toLocaleString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
-      )}
+                  {!isRead(selectedMessage.id) && (
+                    <button
+                      onClick={() => handleMarkAsRead(selectedMessage.id)}
+                      className="px-3 py-1.5 bg-[rgb(var(--accent))] text-white text-xs font-bold rounded-md"
+                    >
+                      Mark Read
+                    </button>
+                  )}
+                </div>
+
+                {/* Message Body */}
+                <div className="prose dark:prose-invert max-w-none">
+                  <p className="text-lg text-[rgb(var(--text))] leading-relaxed whitespace-pre-wrap">
+                    {selectedMessage.message}
+                  </p>
+                </div>
+
+                {/* Actions */}
+                <div className="pt-8 flex gap-4">
+                  <Animatedbutton variant="primary" className="px-6 py-2.5">
+                    Reply via Email
+                  </Animatedbutton>
+                  <Animatedbutton variant="secondary" className="px-6 py-2.5">
+                    View Profile
+                  </Animatedbutton>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* MESSAGE LIST */
+          <div className="flex-1 flex flex-col h-full bg-[rgb(var(--bg))]">
+            {filteredMessages.length === 0 ? (
+              <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-[rgb(var(--muted))]">
+                <Inbox size={48} className="mb-4 opacity-20" />
+                <p className="text-lg font-medium">No messages found</p>
+              </div>
+            ) : (
+              <div className="flex-1 overflow-y-auto custom-scrollbar">
+                {filteredMessages.map(msg => {
+                  const read = isRead(msg.id);
+                  return (
+                    <div
+                      key={msg.id}
+                      onClick={() => {
+                        setSelectedId(msg.id);
+                        if (!read) handleMarkAsRead(msg.id);
+                      }}
+                      className={`
+                                    group relative flex items-center gap-4 p-5 cursor-pointer border-b border-[rgb(var(--border))] hover:bg-[rgb(var(--surface))] transition-colors
+                                    ${!read ? "bg-white dark:bg-zinc-900 border-l-4 border-l-[rgb(var(--accent))] pl-4" : "opacity-80 pl-5"}
+                                `}
+                    >
+                      <div className="shrink-0">
+                        <div
+                          className={`w-2.5 h-2.5 rounded-full ${!read ? "bg-[rgb(var(--accent))]" : "bg-transparent"}`}
+                        />
+                      </div>
+
+                      <div className="flex-1 min-w-0 grid grid-cols-1 md:grid-cols-[200px,1fr,120px] gap-4 items-center">
+                        <h4
+                          className={`text-sm truncate ${!read ? "font-bold text-[rgb(var(--text))]" : "font-medium text-[rgb(var(--text-secondary))]"}`}
+                        >
+                          {msg.sender_email}
+                        </h4>
+
+                        <p className="text-sm text-[rgb(var(--muted))] truncate">
+                          {msg.message}
+                        </p>
+
+                        <div className="text-xs text-[rgb(var(--muted))] text-right whitespace-nowrap">
+                          {new Date(msg.created_at).toLocaleDateString(
+                            undefined,
+                            { month: "short", day: "numeric" },
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
