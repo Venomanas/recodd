@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Quote } from "lucide-react";
 import Image from "next/image";
@@ -66,7 +66,7 @@ export const SocialProofSection = () => {
               className="flex flex-col items-center"
             >
               <blockquote className="text-2xl md:text-3xl font-medium text-[rgb(var(--text))] leading-relaxed mb-8">
-                "{testimonials[current].quote}"
+                &quot;{testimonials[current].quote}&quot;
               </blockquote>
 
               <div className="flex items-center gap-4">

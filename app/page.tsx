@@ -2,28 +2,33 @@
 
 import { Logo } from "@/app/recodd/Logo";
 import { Navbar } from "@/app/components/Navbar";
-import { ThemeToggle } from "@/app/recodd/ThemeToggle";
+
 import { InspirationalHero } from "@/app/recodd/InspirationalHero";
-import { TrustBar } from "@/app/recodd/TrustBar";
+
 import { CategorySection } from "@/app/recodd/CategorySection";
 import { MarketplaceSection } from "@/app/recodd/MarketplaceSection/MarketPlaceSection";
 import { SocialProofSection } from "@/app/recodd/SocialProofSection";
 import { FaLinkedin, FaTwitter, FaInstagram, FaGithub } from "react-icons/fa";
 import { LayoutContainer } from "./components/LayoutContainer";
-import { useState, useEffect } from "react";
+
 import { motion } from "framer-motion";
 
 export default function RecoddApp() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  // Remove unused states
+  // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Remove unused useEffect
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setScrolled(window.scrollY > 20);
+  //   };
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
+
+  // Also remove unused imports if you want to clean further:
+  // import { useState, useEffect } from "react"; -> change to just import { motion } from "framer-motion";
 
   return (
     <div className="min-h-screen flex flex-col transition-colors duration-500 overflow-x-hidden bg-[rgb(var(--bg))]">
@@ -34,6 +39,8 @@ export default function RecoddApp() {
       <main className="flex-1">
         <InspirationalHero />
         {/* TrustBar Removed - Feedback Step 13 */}
+        {/* Remove or comment out unused component */}
+        {/* <TrustBar /> */}
         <CategorySection />
 
         {/* Marketplace Section covers "Featured Profiles" */}

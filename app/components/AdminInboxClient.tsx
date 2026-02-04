@@ -1,15 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  CheckCircle2,
-  Clock,
   User,
-  Briefcase,
   Inbox,
   Archive,
-  MessageSquare,
   ArrowLeft,
   Trash2,
   Mail,
@@ -66,7 +61,7 @@ export default function AdminInboxClient({
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-80px)] bg-white dark:bg-zinc-900 mx-auto max-w-[1600px] border-x border-[rgb(var(--border))]">
       {/* SIDEBAR */}
-      <div className="w-full lg:w-[240px] border-b lg:border-b-0 lg:border-r border-[rgb(var(--border))] p-4 bg-[rgb(var(--bg))]">
+      <div className="w-full lg:w-60 border-b lg:border-b-0 lg:border-r border-[rgb(var(--border))] p-4 bg-[rgb(var(--bg))]">
         <div className="mb-6 px-3 pt-2">
           <h2 className="font-bold text-lg text-[rgb(var(--text))]">Inbox</h2>
         </div>
@@ -79,7 +74,7 @@ export default function AdminInboxClient({
             <button
               key={item.id}
               onClick={() => {
-                setFilter(item.id as any);
+                setFilter(item.id as "all" | "unread" | "archived");
                 setSelectedId(null);
               }}
               className={`

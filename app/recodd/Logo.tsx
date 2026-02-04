@@ -24,7 +24,7 @@ export const Logo = ({ variant = "navbar" }: LogoProps) => {
           <Aperture className="w-5 h-5 text-white" />
         </div>
         <span className="text-xl font-bold tracking-tight text-[rgb(var(--text))]">
-          Reccodd
+          Recodd
         </span>
       </motion.div>
     );
@@ -43,8 +43,8 @@ export const Logo = ({ variant = "navbar" }: LogoProps) => {
       >
         <Aperture className="w-5 h-5 text-white" />
       </div>
-      <span className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">
-        Reccodd
+      <span className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white md:hidden ">
+        Recodd
       </span>
     </motion.div>
   );

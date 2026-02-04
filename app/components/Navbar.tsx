@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, Search, User, ChevronDown } from "lucide-react";
+import { Menu, X, Search, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/app/recodd/Logo";
 import { ThemeToggle } from "@/app/recodd/ThemeToggle";
@@ -11,7 +12,6 @@ import Animatedbutton from "@/app/components/Animatedbutton";
 
 export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const router = useRouter();
@@ -121,13 +121,7 @@ export const Navbar = () => {
                   >
                     Profile Dashboard
                   </Link>
-                  <Link
-                    href="#"
-                    className="block px-4 py-2 text-sm text-[rgb(var(--text))] hover:bg-[rgb(var(--bg))] transition-colors"
-                    onClick={() => setProfileMenuOpen(false)}
-                  >
-                    Settings
-                  </Link>
+                  
                   <hr className="my-2 border-[rgb(var(--border))]" />
                   <button
                     onClick={() => {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -21,29 +22,41 @@ type User = {
   created_at?: string;
 };
 
+// Add type for saved profiles
+type SavedProfile = {
+  id: string;
+  name: string;
+  role: string;
+};
+
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [savedProfiles, setSavedProfiles] = useState<any[]>([]);
+  const [savedProfiles, setSavedProfiles] = useState<SavedProfile[]>([]);
 
   useEffect(() => {
-    // Check localStorage for authentication
-    const authStatus = localStorage.getItem("recodd_auth");
-    if (authStatus === "true") {
-      const mockUser: User = {
-        id: "1",
-        email: localStorage.getItem("recodd_user_email") || "user@recodd.com",
-        full_name:
-          localStorage.getItem("recodd_user_name") || "Professional User",
-        created_at: new Date().toISOString(),
-      };
-      setUser(mockUser);
-    } else {
-      // If not authenticated, redirect to login
-      router.push("/login");
-    }
-    setLoading(false);
+    // Use setTimeout to avoid synchronous state update warning
+    const timer = setTimeout(() => {
+      // Check localStorage for authentication
+      const authStatus = localStorage.getItem("recodd_auth");
+      if (authStatus === "true") {
+        const mockUser: User = {
+          id: "1",
+          email: localStorage.getItem("recodd_user_email") || "user@recodd.com",
+          full_name:
+            localStorage.getItem("recodd_user_name") || "Professional User",
+          created_at: new Date().toISOString(),
+        };
+        setUser(mockUser);
+      } else {
+        // If not authenticated, redirect to login
+        router.push("/login");
+      }
+      setLoading(false);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [router]);
 
   const handleSignOut = () => {

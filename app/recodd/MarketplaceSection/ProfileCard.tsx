@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Briefcase, Clock, MapPin } from "lucide-react";
-import Animatedbutton from "@/app/components/Animatedbutton";
 import { Profile } from "@/lib/recodd/types";
+import Animatedbutton from "@/app/components/Animatedbutton";
+import Image from "next/image";
 
 type Props = {
   profile: Profile;
@@ -35,10 +36,14 @@ export const ProfileCard = ({ profile, mode, onContact }: Props) => {
         {/* Avatar - 64x64px */}
         <div className="shrink-0 relative">
           <div className="w-16 h-16 rounded-full overflow-hidden border border-[rgb(var(--border))] bg-zinc-50 dark:bg-zinc-800">
-            <img
+            <Image
               src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.name}`}
               alt={profile.name}
               className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+              width={64}
+              height={64}
+              unoptimized
+              loading="lazy"
             />
           </div>
         </div>

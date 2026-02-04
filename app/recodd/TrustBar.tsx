@@ -1,8 +1,5 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-
 const companies = ["Microsoft", "Airbnb", "Google", "Spotify", "Amazon"];
 
 // Placeholder for logos since we don't have SVGs. Using text for now or simple shapes.

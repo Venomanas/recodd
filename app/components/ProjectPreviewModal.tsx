@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, Calendar, DollarSign, Tag } from "lucide-react";
+import { X, ExternalLink, Calendar, DollarSign} from "lucide-react";
 
 interface ProjectPreviewModalProps {
   isOpen: boolean;
