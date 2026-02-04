@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { X,  CheckCircle2, AlertCircle } from "lucide-react";
 
 type Props = {
   profileId: number;
@@ -106,11 +106,11 @@ export const ContactModal = ({ profileId, profileType, onClose }: Props) => {
                   <div className="w-16 h-16 rounded-full bg-[rgb(var(--success))/0.1] flex items-center justify-center mb-6">
                     <CheckCircle2 className="w-8 h-8 text-[rgb(var(--success))]" />
                   </div>
-                  <h3 className="text-xl font-bold text-[rgb(var(--text))] mb-2">
+                  <h3 className="text-xl font-bold text-white mb-2">
                     Message Sent
                   </h3>
-                  <p className="text-[rgb(var(--text-secondary))] mb-8">
-                    We've sent a confirmation to{" "}
+                  <p className="text-white mb-8">
+                    We&apos;ve sent a confirmation to{" "}
                     <span className="font-semibold">{email}</span>
                   </p>
                   <Animatedbutton
@@ -129,7 +129,7 @@ export const ContactModal = ({ profileId, profileType, onClose }: Props) => {
                   exit={{ opacity: 0 }}
                 >
                   <div className="mb-8">
-                    <h3 className="text-2xl font-bold text-[rgb(var(--text))] mb-2">
+                    <h3 className="text-2xl font-bold text-white mb-2">
                       Get in Touch
                     </h3>
                     <p className="text-[rgb(var(--text-secondary))] text-sm">
@@ -157,7 +157,7 @@ export const ContactModal = ({ profileId, profileType, onClose }: Props) => {
                     <div className="space-y-1.5">
                       <label
                         htmlFor="email"
-                        className="text-sm font-semibold text-[rgb(var(--text))]"
+                        className="text-sm font-semibold text-white"
                       >
                         Email Address
                       </label>
@@ -171,7 +171,7 @@ export const ContactModal = ({ profileId, profileType, onClose }: Props) => {
                           if (error) setError("");
                         }}
                         className={`
-                            w-full h-12 px-4 rounded-md 
+                            w-full h-12 px-4 rounded-md text-white
                             bg-white dark:bg-zinc-900
                             border ${error && !email ? "border-red-500" : "border-[rgb(var(--border))]"}
                             focus:outline-none focus:border-[rgb(var(--accent))] focus:ring-1 focus:ring-[rgb(var(--accent))]
@@ -183,7 +183,7 @@ export const ContactModal = ({ profileId, profileType, onClose }: Props) => {
                     <div className="space-y-1.5">
                       <label
                         htmlFor="message"
-                        className="text-sm font-semibold text-[rgb(var(--text))]"
+                        className="text-sm font-semibold text-white"
                       >
                         Message
                       </label>
@@ -197,7 +197,7 @@ export const ContactModal = ({ profileId, profileType, onClose }: Props) => {
                         }}
                         rows={4}
                         className={`
-                            w-full p-4 rounded-md 
+                            w-full p-4 rounded-md text-white 
                             bg-white dark:bg-zinc-900
                             border ${error && !message ? "border-red-500" : "border-[rgb(var(--border))]"}
                             focus:outline-none focus:border-[rgb(var(--accent))] focus:ring-1 focus:ring-[rgb(var(--accent))]

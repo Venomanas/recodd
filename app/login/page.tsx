@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import { Briefcase, Lock, Mail, AlertCircle } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -127,7 +126,7 @@ export default function LoginPage() {
 
           {/* Sign Up Link */}
           <div className="mt-6 text-center text-sm text-[rgb(var(--muted))]">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/signup"
               className="text-[rgb(var(--accent))] font-bold hover:underline"
