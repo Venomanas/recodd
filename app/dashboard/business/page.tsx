@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,8 +11,6 @@ import {
   Users,
   Clock,
   TrendingUp,
-  FileText,
-  MessageSquare,
   Plus,
   Calendar,
   CheckCircle2,

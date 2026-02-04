@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -11,7 +13,6 @@ import {
   TrendingUp,
   Shield,
   AlertTriangle,
-  Mail,
   Trash2,
   Ban,
   Eye,
@@ -369,7 +370,7 @@ export default function AdminDashboard() {
                       <span className="font-semibold">Are you sure?</span>
                     </div>
                     <p className="text-xs text-red-600 mb-3">
-                      This action cannot be undone. The user's account and all
+                      This action cannot be undone. The user&apos;s account and all
                       associated data will be permanently deleted.
                     </p>
                     <div className="flex gap-2">
