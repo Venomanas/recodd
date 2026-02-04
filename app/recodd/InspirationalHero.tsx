@@ -48,7 +48,11 @@ export const InspirationalHero = () => {
               className="text-lg md:text-xl text-[rgb(var(--muted))] leading-relaxed"
             >
               Recodd connects you with top-tier freelancers and businesses
-              directly. No middlemen, no hidden fees, <span className="font-bold text-[rgb(var(--accent))]">Commission free platform</span>, just professional work.
+              directly. No middlemen, no hidden fees,{" "}
+              <span className="font-bold text-[rgb(var(--accent))]">
+                Commission free platform
+              </span>
+              , just professional work.
             </motion.p>
 
             {/* CTAs */}
@@ -100,6 +104,7 @@ export const InspirationalHero = () => {
               alt="Professionals collaborating"
               className="object-cover"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               priority
               placeholder="blur"
               blurDataURL="data:image/jpeg;base64,..." // In real app, generate base64

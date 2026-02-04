@@ -1,6 +1,6 @@
 "use client";
 
-import { Logo } from "@/app/recodd/Logo";
+import Logo from "@/app/recodd/Logo";
 import { Navbar } from "@/app/components/Navbar";
 
 import { InspirationalHero } from "@/app/recodd/InspirationalHero";
@@ -57,7 +57,7 @@ export default function RecoddApp() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-8">
             {/* Brand */}
             <div className="lg:col-span-2 space-y-6">
-              <Logo variant="footer" />
+              <Logo />
               <p className="max-w-xs text-sm text-[rgb(var(--muted))] leading-relaxed">
                 Recodd is the leading professional marketplace for direct talent
                 connection. Reliable, fast, and fee-free.
