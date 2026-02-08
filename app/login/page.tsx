@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Animatedbutton from "@/app/components/Animatedbutton";
-import { Briefcase, Lock, Mail, AlertCircle } from "lucide-react";
+import { Lock, Mail, AlertCircle } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { redirectToDashboard, setAuthData } from "@/lib/recodd/auth";
 
 export default function LoginPage() {
@@ -57,10 +58,13 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-linear-to-br from-[rgb(var(--accent))]/10 via-transparent to-[rgb(var(--gray))]/10"></div>
 
         <div className="relative z-10 p-12 text-center max-w-lg">
-          <div className="mb-6 inline-block p-6 bg-[rgb(var(--accent))]/10 rounded-3xl backdrop-blur-sm">
-            <Briefcase
-              size={64}
-              className="text-[rgb(var(--accent))] animate-pulse"
+          <div className="mb-6 inline-block p-4 bg-[rgb(var(--accent))]/10 rounded-3xl backdrop-blur-sm">
+            <Image
+              src="/logo-icon.webp"
+              alt="Recodd Logo"
+              width={80}
+              height={80}
+              className="rounded-2xl"
             />
           </div>
           <h1 className="text-5xl font-bold mb-4 tracking-tight">

@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import {
-  Briefcase,
   Lock,
   Mail,
   AlertCircle,
@@ -12,8 +11,10 @@ import {
   Users,
   Shield,
   GraduationCap,
+  Briefcase,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { UserRole } from "@/lib/recodd/types";
 import { setAuthData, getDashboardRoute } from "@/lib/recodd/auth";
 
@@ -105,11 +106,14 @@ export default function SignupPage() {
       <div className="hidden lg:flex w-1/2 bg-[rgb(var(--surface))] relative items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-br from-[rgb(var(--accent))]/10 via-transparent to-[rgb(var(--gray))]/10"></div>
 
-        <div className="relative z-10 p-12 text-center max-w-lg">
-          <div className="mb-6 inline-block p-6 bg-[rgb(var(--accent))]/10 rounded-3xl backdrop-blur-sm">
-            <Briefcase
-              size={64}
-              className="text-[rgb(var(--accent))] animate-pulse"
+        <div className="relative z-10 p-8 text-center max-w-lg">
+          <div className="mb-6 inline-block p-4 bg-[rgb(var(--accent))]/10 rounded-3xl backdrop-blur-sm">
+            <Image
+              src="/logo-icon.webp"
+              alt="Recodd Logo"
+              width={80}
+              height={80}
+              className="rounded-2xl"
             />
           </div>
           <h1 className="text-5xl font-bold mb-4 tracking-tight">

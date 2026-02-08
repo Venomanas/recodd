@@ -12,6 +12,7 @@ import {
   FolderOpen,
   Building2,
   Shield,
+  ArrowLeft,
 } from "lucide-react";
 import { UserRole } from "@/lib/recodd/types";
 
@@ -113,6 +114,17 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] pt-20">
+      {/* Back to Home Button */}
+      <div className="fixed top-24 left-6 z-50">
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-xl text-[rgb(var(--text))] hover:bg-[rgb(var(--accent))] hover:text-white hover:border-[rgb(var(--accent))] transition-all shadow-md"
+        >
+          <ArrowLeft size={18} />
+          <span className="text-sm font-medium">Back to Home</span>
+        </Link>
+      </div>
+
       <div className="flex max-w-[1600px] mx-auto">
         {/* Sidebar */}
         <aside className="hidden md:flex flex-col w-64 min-h-screen bg-[rgb(var(--surface))] border-r border-[rgb(var(--border))] p-6 sticky top-20 h-[calc(100vh-5rem)]">

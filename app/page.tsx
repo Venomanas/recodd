@@ -63,18 +63,35 @@ export default function RecoddApp() {
                 connection. Reliable, fast, and fee-free.
               </p>
               <div className="flex gap-3">
-                {[FaTwitter, FaLinkedin, FaInstagram, FaGithub].map(
-                  (Icon, i) => (
-                    <motion.div
-                      key={i}
-                      whileHover={{ y: -3 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-9 h-9 rounded-full bg-[rgb(var(--surface))] border border-[rgb(var(--border))] flex items-center justify-center text-[rgb(var(--muted))] hover:bg-[rgb(var(--accent))] hover:text-white transition-colors cursor-pointer"
-                    >
-                      <Icon size={14} />
-                    </motion.div>
-                  ),
-                )}
+                {[
+                  { Icon: FaTwitter, href: "#", label: "Twitter" },
+                  {
+                    Icon: FaLinkedin,
+                    href: "https://www.linkedin.com/in/recodd-agency-a95254353",
+                    label: "LinkedIn",
+                  },
+                  {
+                    Icon: FaInstagram,
+                    href: "https://www.instagram.com/recodd.agency",
+                    label: "Instagram",
+                  },
+                  { Icon: FaGithub, href: "#", label: "GitHub" },
+                ].map((social, i) => (
+                  <motion.a
+                    key={i}
+                    href={social.href}
+                    target={social.href !== "#" ? "_blank" : undefined}
+                    rel={
+                      social.href !== "#" ? "noopener noreferrer" : undefined
+                    }
+                    aria-label={social.label}
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-9 h-9 rounded-full bg-[rgb(var(--surface))] border border-[rgb(var(--border))] flex items-center justify-center text-[rgb(var(--muted))] hover:bg-[rgb(var(--accent))] hover:text-white transition-colors cursor-pointer"
+                  >
+                    <social.Icon size={14} />
+                  </motion.a>
+                ))}
               </div>
             </div>
 

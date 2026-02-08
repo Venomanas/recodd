@@ -9,10 +9,16 @@ import {
   AlertCircle,
   MoreHorizontal,
   ExternalLink,
+  ArrowLeft,
+  Trash2,
 } from "lucide-react";
 
 import Image from "next/image";
+import Link from "next/link";
 import Animatedbutton from "@/app/components/Animatedbutton";
+import AddProjectModal, {
+  type Project,
+} from "@/app/components/AddProjectModal";
 
 // --- MOCK DATA (Replace with Supabase later) ---
 const MOCK_ASSIGNMENTS = [
@@ -42,10 +48,12 @@ const MOCK_ASSIGNMENTS = [
   },
 ];
 
-const MOCK_PORTFOLIO = [
+const INITIAL_PORTFOLIO: Project[] = [
   {
     id: 1,
     title: "E-Commerce Dashboard",
+    description:
+      "A complete admin dashboard for managing online store operations",
     image:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2670",
     tags: ["React", "Tailwind"],
@@ -53,6 +61,7 @@ const MOCK_PORTFOLIO = [
   {
     id: 2,
     title: "Finance App UI",
+    description: "Modern fintech application interface design",
     image:
       "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1470",
     tags: ["Figma", "Next.js"],
@@ -61,11 +70,22 @@ const MOCK_PORTFOLIO = [
 
 export default function FreelancerDashboard() {
   const [activeTab, setActiveTab] = useState<"overview" | "portfolio">(
-    "overview"
+    "overview",
   );
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] pt-32 pb-20 px-6 sm:px-12 lg:px-24">
+      {/* Back to Home Button */}
+      <div className="fixed top-24 left-6 z-50">
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-xl text-[rgb(var(--text))] hover:bg-[rgb(var(--accent))] hover:text-white hover:border-[rgb(var(--accent))] transition-all shadow-md"
+        >
+          <ArrowLeft size={18} />
+          <span className="text-sm font-medium">Back to Home</span>
+        </Link>
+      </div>
+
       <div className="max-w-[1600px] mx-auto space-y-12">
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -268,7 +288,7 @@ function ProfileCard() {
                 >
                   {tag}
                 </span>
-              )
+              ),
             )}
             <button className="px-3 py-1.5 rounded-lg border border-dashed border-[rgb(var(--muted))] text-sm text-[rgb(var(--muted))] hover:text-[rgb(var(--accent))] hover:border-[rgb(var(--accent))] transition-colors">
               + Add Skill
@@ -368,72 +388,132 @@ function ProfileCard() {
 
 // --- UPDATED PORTFOLIO SECTION ---
 function PortfolioSection() {
+  const [projects, setProjects] = useState<Project[]>(INITIAL_PORTFOLIO);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAddProject = (newProject: Omit<Project, "id">) => {
+    const project: Project = {
+      ...newProject,
+      id: Date.now(),
+    };
+    setProjects(prev => [project, ...prev]);
+  };
+
+  const handleDeleteProject = (id: number) => {
+    setProjects(prev => prev.filter(p => p.id !== id));
+  };
+
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="space-y-12"
-    >
-      {/* 1. The Profile Card (Matches Wireframe) */}
-      <ProfileCard />
+    <>
+      <AddProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={handleAddProject}
+      />
 
-      {/* 2. The Projects Grid (The "Work" below the profile) */}
-      <div className="space-y-6">
-        <h3 className="text-xl font-bold text-[rgb(var(--text))] flex items-center gap-2">
-          <Briefcase size={20} className="text-[rgb(var(--accent))]" />
-          My Projects
-        </h3>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="space-y-12"
+      >
+        {/* 1. The Profile Card (Matches Wireframe) */}
+        <ProfileCard />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {MOCK_PORTFOLIO.map(project => (
-            <div
-              key={project.id}
-              className="group rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--surface))] overflow-hidden hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
+        {/* 2. The Projects Grid (The "Work" below the profile) */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold text-[rgb(var(--text))] flex items-center gap-2">
+              <Briefcase size={20} className="text-[rgb(var(--accent))]" />
+              My Projects
+              <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-[rgb(var(--accent))]/10 text-[rgb(var(--accent))] rounded-full">
+                {projects.length}
+              </span>
+            </h3>
+            <Animatedbutton
+              onClick={() => setIsModalOpen(true)}
+              variant="primary"
+              className="px-4 py-2"
             >
-              <div className="aspect-video w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 relative">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  width={100}
-                  height={100}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                  <button className="p-2 bg-white rounded-full text-black hover:scale-110 transition-transform">
-                    <ExternalLink size={18} />
-                  </button>
-                  <button className="p-2 bg-white rounded-full text-black hover:scale-110 transition-transform">
-                    <MoreHorizontal size={18} />
-                  </button>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-[rgb(var(--text))] mb-2">
-                  {project.title}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map(tag => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 text-xs font-medium bg-[rgb(var(--bg))] border border-[rgb(var(--border))] rounded-md text-[rgb(var(--muted))]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+              <Plus size={18} className="mr-2" />
+              Add Project
+            </Animatedbutton>
+          </div>
 
-          {/* "Add New" Button */}
-          <button className="rounded-2xl border-2 border-dashed border-[rgb(var(--border))] bg-transparent flex flex-col items-center justify-center min-h-[300px] text-[rgb(var(--muted))] hover:text-[rgb(var(--accent))] hover:border-[rgb(var(--accent))] hover:bg-[rgb(var(--accent))]/5 transition-all group">
-            <div className="w-16 h-16 rounded-full bg-[rgb(var(--surface))] group-hover:bg-white flex items-center justify-center mb-4 shadow-sm transition-colors">
-              <Plus size={32} />
-            </div>
-            <span className="font-medium">Add New Project</span>
-          </button>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map(project => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="group rounded-2xl border border-[rgb(var(--border))] bg-[rgb(var(--surface))] overflow-hidden hover:shadow-xl hover:shadow-black/5 transition-all duration-300"
+              >
+                <div className="aspect-video w-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 relative">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    {project.link && (
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 bg-white rounded-full text-black hover:scale-110 transition-transform"
+                      >
+                        <ExternalLink size={18} />
+                      </a>
+                    )}
+                    <button className="p-2 bg-white rounded-full text-black hover:scale-110 transition-transform">
+                      <MoreHorizontal size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteProject(project.id)}
+                      className="p-2 bg-red-500 rounded-full text-white hover:scale-110 hover:bg-red-600 transition-all"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-[rgb(var(--text))] mb-1">
+                    {project.title}
+                  </h3>
+                  {project.description && (
+                    <p className="text-sm text-[rgb(var(--muted))] mb-3 line-clamp-2">
+                      {project.description}
+                    </p>
+                  )}
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map(tag => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 text-xs font-medium bg-[rgb(var(--bg))] border border-[rgb(var(--border))] rounded-md text-[rgb(var(--muted))]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+
+            {/* "Add New" Button Card */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="rounded-2xl border-2 border-dashed border-[rgb(var(--border))] bg-transparent flex flex-col items-center justify-center min-h-[300px] text-[rgb(var(--muted))] hover:text-[rgb(var(--accent))] hover:border-[rgb(var(--accent))] hover:bg-[rgb(var(--accent))]/5 transition-all group"
+            >
+              <div className="w-16 h-16 rounded-full bg-[rgb(var(--surface))] group-hover:bg-white flex items-center justify-center mb-4 shadow-sm transition-colors">
+                <Plus size={32} />
+              </div>
+              <span className="font-medium">Add New Project</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </>
   );
 }
