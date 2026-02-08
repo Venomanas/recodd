@@ -1,6 +1,6 @@
 "use client";
 
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Quote } from "lucide-react";
 import Image from "next/image";
@@ -75,6 +75,7 @@ export const SocialProofSection = () => {
                     src={testimonials[current].image}
                     alt={testimonials[current].name}
                     fill
+                    sizes="56px"
                     className="object-cover"
                   />
                 </div>
