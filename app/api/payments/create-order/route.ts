@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse } from "next/server";
-import { razorpay } from "@/lib/recodd/services/razorpay";
+import { getRazorpay } from "@/lib/recodd/services/razorpay";
 
 export async function POST(req: Request) {
   try {
@@ -10,6 +10,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
     }
 
+    const razorpay = getRazorpay();
     const order = await razorpay.orders.create({
       amount: amount * 100, // ₹ → paise
       currency: "INR",
