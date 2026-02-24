@@ -1,0 +1,67 @@
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\components\AddProjectModal.tsx
+  4:13  warning  'Upload' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\components\ChatModal.tsx
+  35:3   warning  'recipientRole' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  43:27  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\components\ChatModal.tsx:43:27
+  41 |       text: `Hi! I'm ${recipientName}. How can I help you today?`,
+  42 |       sender: "other",
+> 43 |       timestamp: new Date(Date.now() - 60000),
+     |                           ^^^^^^^^^^ Cannot call impure function
+  44 |     },
+  45 |   ]);
+  46 |   const [inputValue, setInputValue] = useState("");  react-hooks/purity
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\components\Navbar.tsx
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\components\PaymentModal.tsx
+  225:24  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    react/no-unescaped-entities
+  375:39  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\components\PaymentModal.tsx:375:39
+  373 |                 </p>
+  374 |                 <p className="text-xs text-[rgb(var(--muted))] mb-6">
+> 375 |                   Transaction ID: TXN{Date.now().toString().slice(-8)}
+      |                                       ^^^^^^^^^^ Cannot call impure function
+  376 |                 </p>
+  377 |                 <Animatedbutton
+  378 |                   variant="primary"  react-hooks/purity
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\components\StatsCard.tsx
+  1:10  warning  'ReactNode' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\dashboard\business\settings\page.tsx
+  43:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\dashboard\business\settings\page.tsx:43:5
+  41 |       return;
+  42 |     }
+> 43 |     setUser({ ...currentUser });
+     |     ^^^^^^^ Avoid calling setState() directly within an effect
+  44 |     // In a real app, you would fetch actual profile data here
+  45 |     setFormData(prev => ({ ...prev, companyName: currentUser.name }));
+  46 |   }, [router]);  react-hooks/set-state-in-effect
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\dashboard\freelancer\portfolio\page.tsx
+  9:3  warning  'Briefcase' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Admin\OneDrive\Desktop\PopO\recodd\app\dashboard\freelancer\settings\page.tsx
+  10:8  warning  'Animatedbutton' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (4 errors, 6 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

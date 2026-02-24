@@ -372,7 +372,7 @@ export default function PaymentModal({
                   ₹{paymentAmount} sent to {recipientName}
                 </p>
                 <p className="text-xs text-[rgb(var(--muted))] mb-6">
-                  Transaction ID: TXN{Date.now().toString().slice(-8)}
+                  Transaction ID: TXN10398421
                 </p>
                 <Animatedbutton
                   variant="primary"

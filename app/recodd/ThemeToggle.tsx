@@ -27,9 +27,10 @@ export const ThemeToggle = () => {
     }
   };
 
-  if (!mounted) return (
-  <div className="w-9 h-9 bg-zinc-100 dark:bg-zinc-800 animate-pulse rounded-full" />
-  ) // Prevent hydration mismatch
+  if (!mounted)
+    return (
+      <div className="w-9 h-9 bg-zinc-100 dark:bg-zinc-800 animate-pulse rounded-full" />
+    ); // Prevent hydration mismatch
 
   return (
     <button

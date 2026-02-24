@@ -35,7 +35,7 @@ export default function ChatModal({
   recipientRole = "Freelancer",
   recipientAvatar,
 }: ChatModalProps) {
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<Message[]>(() => [
     {
       id: 1,
       text: `Hi! I'm ${recipientName}. How can I help you today?`,

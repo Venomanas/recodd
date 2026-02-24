@@ -67,9 +67,9 @@ export const Navbar = () => {
 
     // Route users to the most relevant dashboard area for creating work/posts
     if (user.role === "freelancer") {
-      router.push("/dashboard/freelancer?tab=portfolio");
+      router.push("/dashboard/freelancer/portfolio");
     } else if (user.role === "business") {
-      router.push("/dashboard/business");
+      router.push("/dashboard/business/add-project");
     } else {
       const dashboardRoute = getDashboardRoute(
         user.role as "freelancer" | "business" | "admin",
@@ -100,18 +100,29 @@ export const Navbar = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6 flex-1 justify-center">
-          <Link
-            href="/freelancers"
-            className="text-sm font-medium text-[rgb(var(--text-secondary))] hover:text-[rgb(var(--accent))] transition-colors"
-          >
-            Find Talent
-          </Link>
-          <Link
-            href="/businesses"
-            className="text-sm font-medium text-[rgb(var(--text-secondary))] hover:text-[rgb(var(--accent))] transition-colors"
-          >
-            Find Work
-          </Link>
+          {/* Role-based nav: Freelancers see Find Work (businesses), Businesses see Find Talent (freelancers), Guests see both */}
+          {(!isAuth ||
+            !user ||
+            user.role === "business" ||
+            user.role === "admin") && (
+            <Link
+              href="/freelancers"
+              className="text-sm font-medium text-[rgb(var(--text-secondary))] hover:text-[rgb(var(--accent))] transition-colors"
+            >
+              Find Talent
+            </Link>
+          )}
+          {(!isAuth ||
+            !user ||
+            user.role === "freelancer" ||
+            user.role === "admin") && (
+            <Link
+              href="/businesses"
+              className="text-sm font-medium text-[rgb(var(--text-secondary))] hover:text-[rgb(var(--accent))] transition-colors"
+            >
+              Find Work
+            </Link>
+          )}
 
           {/* Search Bar */}
           <form
@@ -266,21 +277,31 @@ export const Navbar = () => {
                 />
               </form>
 
-              {/* Mobile Nav Links */}
-              <Link
-                href="/freelancers"
-                className="font-medium text-lg text-[rgb(var(--text))]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Find Talent
-              </Link>
-              <Link
-                href="/businesses"
-                className="font-medium text-lg text-[rgb(var(--text))]"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Find Work
-              </Link>
+              {/* Mobile Nav Links (role-based) */}
+              {(!isAuth ||
+                !user ||
+                user.role === "business" ||
+                user.role === "admin") && (
+                <Link
+                  href="/freelancers"
+                  className="font-medium text-lg text-[rgb(var(--text))]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Find Talent
+                </Link>
+              )}
+              {(!isAuth ||
+                !user ||
+                user.role === "freelancer" ||
+                user.role === "admin") && (
+                <Link
+                  href="/businesses"
+                  className="font-medium text-lg text-[rgb(var(--text))]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Find Work
+                </Link>
+              )}
 
               {isAuth && user ? (
                 <>
