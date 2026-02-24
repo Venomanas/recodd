@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Plus,
@@ -9,16 +10,16 @@ import {
   AlertCircle,
   MoreHorizontal,
   ExternalLink,
-  ArrowLeft,
   Trash2,
 } from "lucide-react";
 
 import Image from "next/image";
-import Link from "next/link";
 import Animatedbutton from "@/app/components/Animatedbutton";
 import AddProjectModal, {
   type Project,
 } from "@/app/components/AddProjectModal";
+import DashboardLayout from "@/app/components/DashboardLayout";
+import { getCurrentUser, isAuthenticated } from "@/lib/recodd/auth";
 
 // --- MOCK DATA (Replace with Supabase later) ---
 const MOCK_ASSIGNMENTS = [
@@ -69,24 +70,54 @@ const INITIAL_PORTFOLIO: Project[] = [
 ];
 
 export default function FreelancerDashboard() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [user, setUser] = useState<{
+    name: string;
+    email: string;
+    role: string | null;
+  } | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "portfolio">(
     "overview",
   );
 
-  return (
-    <div className="min-h-screen bg-[rgb(var(--bg))] pt-32 pb-20 px-6 sm:px-12 lg:px-24">
-      {/* Back to Home Button */}
-      <div className="fixed top-24 left-6 z-50">
-        <Link
-          href="/"
-          className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-xl text-[rgb(var(--text))] hover:bg-[rgb(var(--accent))] hover:text-white hover:border-[rgb(var(--accent))] transition-all shadow-md"
-        >
-          <ArrowLeft size={18} />
-          <span className="text-sm font-medium">Back to Home</span>
-        </Link>
-      </div>
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      router.push("/login");
+      return;
+    }
 
-      <div className="max-w-[1600px] mx-auto space-y-12">
+    const currentUser = getCurrentUser();
+    if (!currentUser || currentUser.role !== "freelancer") {
+      router.push("/");
+      return;
+    }
+
+    setUser({
+      name: currentUser.name,
+      email: currentUser.email,
+      role: currentUser.role,
+    });
+  }, [router]);
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "portfolio") {
+      setActiveTab("portfolio");
+    }
+  }, [searchParams]);
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  return (
+    <DashboardLayout role="freelancer" userName={user.name}>
+      <div className="space-y-12">
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
@@ -94,7 +125,7 @@ export default function FreelancerDashboard() {
               Freelancer Dashboard
             </h1>
             <p className="text-[rgb(var(--muted))] mt-2 text-lg">
-              Welcome back, Anas. You have{" "}
+              Welcome back, {user.name}. You have{" "}
               <span className="text-[rgb(var(--accent))] font-semibold">
                 2 active tasks
               </span>
@@ -128,7 +159,7 @@ export default function FreelancerDashboard() {
 
         {activeTab === "overview" ? <OverviewSection /> : <PortfolioSection />}
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
 

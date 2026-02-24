@@ -114,8 +114,8 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-[rgb(var(--bg))] pt-20">
-      {/* Back to Home Button */}
-      <div className="fixed top-24 left-6 z-50">
+      {/* Back to Home Button (desktop only to avoid overlapping mobile nav) */}
+      <div className="fixed top-24 left-4 z-50 hidden md:block">
         <Link
           href="/"
           className="flex items-center gap-2 px-4 py-2 bg-[rgb(var(--surface))] border border-[rgb(var(--border))] rounded-xl text-[rgb(var(--text))] hover:bg-[rgb(var(--accent))] hover:text-white hover:border-[rgb(var(--accent))] transition-all shadow-md"
@@ -129,7 +129,7 @@ export default function DashboardLayout({
         {/* Sidebar */}
         <aside className="hidden md:flex flex-col w-64 min-h-screen bg-[rgb(var(--surface))] border-r border-[rgb(var(--border))] p-6 sticky top-20 h-[calc(100vh-5rem)]">
           {/* User Info */}
-          <div className="mb-8 pb-6 border-b border-[rgb(--border)]">
+          <div className="mb-8 pb-6 border-b border-[rgb(var(--border))]">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-linear-to-br from-[rgb(var(--accent))] to-[rgb(var(--gray))] flex items-center justify-center text-white font-bold text-lg shadow-md">
                 {userName.charAt(0).toUpperCase()}

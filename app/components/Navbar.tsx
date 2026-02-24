@@ -62,6 +62,22 @@ export const Navbar = () => {
     router.push("/");
   };
 
+  const handleCreatePostClick = () => {
+    if (!user?.role) return;
+
+    // Route users to the most relevant dashboard area for creating work/posts
+    if (user.role === "freelancer") {
+      router.push("/dashboard/freelancer?tab=portfolio");
+    } else if (user.role === "business") {
+      router.push("/dashboard/business");
+    } else {
+      const dashboardRoute = getDashboardRoute(
+        user.role as "freelancer" | "business" | "admin",
+      );
+      router.push(dashboardRoute);
+    }
+  };
+
   const handleDashboardClick = () => {
     if (user?.role) {
       const dashboardRoute = getDashboardRoute(
@@ -135,7 +151,10 @@ export const Navbar = () => {
             <>
               {/* Create Post Button for Freelancers & Businesses */}
               {(user.role === "freelancer" || user.role === "business") && (
-                <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[rgb(var(--accent))] border border-[rgb(var(--accent))] rounded-lg hover:bg-[rgb(var(--accent))] hover:text-white transition-all">
+                <button
+                  onClick={handleCreatePostClick}
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[rgb(var(--accent))] border border-[rgb(var(--accent))] rounded-lg hover:bg-[rgb(var(--accent))] hover:text-white transition-all"
+                >
                   <Plus size={18} />
                   <span>Create Post</span>
                 </button>
