@@ -123,6 +123,12 @@ export const Navbar = () => {
               Find Work
             </Link>
           )}
+          <Link
+            href="/gallery"
+            className="text-sm font-medium text-[rgb(var(--text-secondary))] hover:text-[rgb(var(--accent))] transition-colors"
+          >
+            Gallery
+          </Link>
 
           {/* Search Bar */}
           <form
@@ -302,6 +308,13 @@ export const Navbar = () => {
                   Find Work
                 </Link>
               )}
+              <Link
+                href="/gallery"
+                className="font-medium text-lg text-[rgb(var(--text))]"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Gallery
+              </Link>
 
               {isAuth && user ? (
                 <>
